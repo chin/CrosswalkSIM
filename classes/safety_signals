@@ -1,11 +1,5 @@
 #!/usr/bin/python
 
-class safety_signals:
-    def __init__(self, crosswalk_signal, traffic_signal, timer):
-        self.crosswalk_signal = crosswalksignal(crosswalk_signal) #WALK || NO_WALK
-        self.trafficsignal = trafficsignal(traffic_light) #RED || YELLOW || GREEN
-        self.green_timer
-
 class crosswalksignal(ENUM):
     NO_WALK = 0
     WALK = 1
@@ -13,4 +7,36 @@ class crosswalksignal(ENUM):
 class trafficlight(ENUM):
     RED = 0
     YELLOW = 1
-    GREEN = 2 
+    GREEN = 2
+    
+class safety_signals:
+    def __init__(self, crosswalk_signal, traffic_signal, timer):
+        self.crosswalk_signal = crosswalksignal(crosswalk_signal) #WALK || NO_WALK
+        self.trafficsignal = trafficsignal(traffic_light) #RED || YELLOW || GREEN
+        self.green_timer
+
+    #definitions for functions changing the safety signals
+    def walk_request_pushed:
+
+    def calculate_auto_delay:
+
+    def ped_at_button:
+
+    def yellow_begins:
+
+    def yellow_expires:
+
+    def red_expires:
+
+    #other functions
+    def red_expires:
+
+    def red_begins:
+
+    def green_beigns:
+
+    def green_expires:
+
+    def calculate_ped_delay:
+
+

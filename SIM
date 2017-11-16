@@ -1,51 +1,47 @@
 #!/usr/bin/python
 import sys
-import os
+
+#importing of the class files
+from classes import safety_signals
+from classes import peds 
+from classes import autos
+from classes import event
+
+import argparse
+import Queue as Q
+
+#statistical imports
 import math
 from random import expovariate # exponenial(lamb)
 from random import normalvariate #(mu, sigma)
 from random import uniform
 from statistics import mean
 from statistics import median
-import matplotlib.pyplot as plt
-import numpy as np
+#mport matplotlib.pyplot as plt
+#import numpy as np
 
-#importing of the class files
-from classes import safety_signals
-from classes import peds 
-from classes import autos 
+
+
 
 
 n = sys.argv[1]
 autoAriivalSpeed = sys.argv[2] #Uniform(0,1)
 pedArrivalSpeed = sys.argv[3] #Uniform(0,1)
 crosswalkButtonPress = sys.argv[4] #Uniform(0,1)
+#TODO: must handle any problems with  argument values and exit with descriptive non zero
 
 
 
-class crosswalksignal(ENUM):
-    NO_WALK = 0
-    WALK = 1
+#TODO: priority queues: notation is "put" and "get"
+event_list = Q.PriorityQueue()
+ped_list = Q.PriorityQueue()
+auto_list = Q.PriorityQueue()
 
-class trafficlight(ENUM):
-    RED = 0
-    YELLOW = 1
-    GREEN = 2      
+#TODO: generate n aumobiles
+#TODO: generate n pedestrians
 
-
-
+t = 0#sim_time
 
 
-
-
-
-
-
-event_list =  []
-
-#generate n aumobiles
-
- while events_list != []:
+while !events_list.empty(): #event_list non empty
     e = events_list.pop(0)
-
-    #different types of events
