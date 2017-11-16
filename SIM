@@ -10,7 +10,18 @@ from statistics import median
 import matplotlib.pyplot as plt
 import numpy as np
 
-num_sims = sys.argv[1]
+#importing of the class files
+from classes import safety_signals
+from classes import peds 
+from classes import autos 
+
+
+n = sys.argv[1]
+autoAriivalSpeed = sys.argv[2] #Uniform(0,1)
+pedArrivalSpeed = sys.argv[3] #Uniform(0,1)
+crosswalkButtonPress = sys.argv[4] #Uniform(0,1)
+
+
 
 class crosswalksignal(ENUM):
     NO_WALK = 0
@@ -21,17 +32,20 @@ class trafficlight(ENUM):
     YELLOW = 1
     GREEN = 2      
 
-class safety_signals:
-	def __init__(self, crosswalk_signal, traffic_signal, timer):
-        self.crosswalk_signal = crosswalksignal(crosswalk_signal) #WALK || NO_WALK
-        self.trafficsignal = trafficsignal(traffic_light) #RED || YELLOW || GREEN
-        self.green_timer
 
 
-class peds:
-    def __init__(self, ):
-        
 
 
-class autos:
-    def __init__(self, ):
+
+
+
+
+
+event_list =  []
+
+#generate n aumobiles
+
+ while events_list != []:
+    e = events_list.pop(0)
+
+    #different types of events

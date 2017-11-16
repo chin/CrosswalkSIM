@@ -1,0 +1,4 @@
+#!/usr/bin/python
+
+class autos:
+    def __init__(self, ):

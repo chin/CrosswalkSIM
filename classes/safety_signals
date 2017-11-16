@@ -1,0 +1,16 @@
+#!/usr/bin/python
+
+class safety_signals:
+    def __init__(self, crosswalk_signal, traffic_signal, timer):
+        self.crosswalk_signal = crosswalksignal(crosswalk_signal) #WALK || NO_WALK
+        self.trafficsignal = trafficsignal(traffic_light) #RED || YELLOW || GREEN
+        self.green_timer
+
+class crosswalksignal(ENUM):
+    NO_WALK = 0
+    WALK = 1
+
+class trafficlight(ENUM):
+    RED = 0
+    YELLOW = 1
+    GREEN = 2 
