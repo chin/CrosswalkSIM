@@ -16,25 +16,29 @@ class safety_signals:
 
     #definitions for functions changing the safety signals
     def button_press(self):
-        if self.traffic_signal == GREEN:
+        if self.traffic_signal is GREEN:
             #if green timer expired
                 yellow_begins(self)
             #else
                 #green timer decrementing so in rightmost blue state
-        if self.traffic_signal == YELLOW:
+        if self.traffic_signal is YELLOW:
             #trigger yellow timer = 8s
 
-        if self.traffic_signal == RED:
+        if self.traffic_signal is RED:
             #if red timer not expired do nothing
 
         return self
 
     def calculate_auto_delay:
 
-    def ped_at_button:
+    def ped_at_button(self):
+        if self.traffic_signal is RED
+            #walk
+        else
+            button_press(self)
 
     def yellow_begins(self):
-    	self.traffic_signal = YELLOW
+        self.traffic_signal = YELLOW
         #yellow timer = 8s
         return self
 
