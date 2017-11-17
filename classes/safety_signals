@@ -29,7 +29,6 @@ class safety_signals:
 
         return self
 
-    def calculate_auto_delay:
 
     def ped_at_button(self):
         if self.traffic_signal is RED
@@ -40,6 +39,13 @@ class safety_signals:
     def yellow_begins(self):
         self.traffic_signal = YELLOW
         #yellow timer = 8s
+
+        #this is when you calculate auto delay
+        #TODO is this right?
+        #-----------------------------------------------------??
+        for a : auto_list
+            calculate_auto_delay
+
         return self
 
     def yellow_expires(self):
@@ -65,6 +71,6 @@ class safety_signals:
     def green_expires(self):
         return self
 
-    def calculate_ped_delay:
+   
 
 

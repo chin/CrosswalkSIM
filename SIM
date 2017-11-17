@@ -34,8 +34,8 @@ crosswalkButtonPress = sys.argv[4] #Uniform(0,1)
 
 #TODO: priority queues: notation is "put" and "get"
 event_list = Q.PriorityQueue()
-ped_list = Q.PriorityQueue()
-auto_list = Q.PriorityQueue()
+ped_list = []
+auto_list = []
 
 #TODO: generate n aumobiles
 #TODO: generate n pedestrians
