@@ -18,12 +18,11 @@ class safety_signals:
     def button_press(self):
         if self.traffic_signal == GREEN:
             #if green timer expired
-                self.traffic_signal = YELLOW
-                #trigger yellow timer
+                yellow_begins(self)
             #else
                 #green timer decrementing so in rightmost blue state
         if self.traffic_signal == YELLOW:
-            #trigger yellow timer
+            #trigger yellow timer = 8s
 
         if self.traffic_signal == RED:
             #if red timer not expired do nothing
@@ -34,7 +33,10 @@ class safety_signals:
 
     def ped_at_button:
 
-    def yellow_begins:
+    def yellow_begins(self):
+    	self.traffic_signal = YELLOW
+        #yellow timer = 8s
+        return self
 
     def yellow_expires(self):
         self.crosswalk_signal = WALK
@@ -43,13 +45,18 @@ class safety_signals:
     def red_expires(self):
         self.crosswalk_signal = NO_WALK
         self.traffic_signal = GREEN
-        #trigger green timer
+        green_begins(self)
         return self
 
-    def red_begins:
-        #pedestians can walk
+    def red_begins(self):
+        self.crosswalk_signal = WALK
+        # red timer = 18s: pedestians can walk
+        return self
 
-    def green_begins:
+    def green_begins(self):
+        self.traffic_signal = GREEN
+        #green timer = 35s
+        return self
 
     def green_expires(self):
         return self
