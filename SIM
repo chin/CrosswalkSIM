@@ -95,8 +95,10 @@ def getNextPedSpeed():
     b = 4.1
     return a + u * (b - a)
 
-def getNextButtonProb():
+def getNext_ButtonTracefile_UniformRand():
     #TODO CONVERT TO PROBABILITY VALUE CORRECTLY
+    #THIS WILL ALWAYS RETURN UNIFORM 0,1
+    #YOU WILL NEED TO INTREPRET IT BASED ON STATE OF CROSSWALK
     u = readNextUniformInTrace(traceType.BUTTON)
     u = float(u)
     return u
@@ -106,6 +108,8 @@ class traceType(Enum):
     PED = 1
     BUTTON = 2
 
+#DO NOT CALL THIS DIRECTLY
+#call using the above methods to get random values
 def readNextUniformInTrace(traceCurrent):
     if not isinstance(traceCurrent, traceType):
         raise TypeError('Must be a trace type enum type')
