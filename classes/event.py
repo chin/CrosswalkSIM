@@ -1,4 +1,4 @@
-#!/usr/bin/python
+
 
 from enum import Enum
 

@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 import sys
 
 #importing of the class files
@@ -25,36 +25,41 @@ from statistics import median
 
 
 #Global declarations
-global n;
-global autoArrivalSpeed;
-global pedArrivalSpeed;
-global crosswalkButtonPress;
-global event_list;
-global ped_list;
-global auto_list;
+
+#TODO: priority queues: notation is "put" and "get"
+event_list = Q.PriorityQueue()
+ped_list = []
+auto_list = []
+
+n = 0;
+autoArrivalTracefile = "";
+pedArrivalTracefile = "";
+buttonpushTracefile = "";
+
 
 def main():
-    def __init__():
-        n = sys.argv[1]
-        autoArrivalSpeed = sys.argv[2] #Uniform(0,1)
-        pedArrivalSpeed = sys.argv[3] #Uniform(0,1)
-        crosswalkButtonPress = sys.argv[4] #Uniform(0,1)
-        #TODO: must handle any problems with  argument values and exit with descriptive non zero
-        
-        #TODO: priority queues: notation is "put" and "get"
-        event_list = Q.PriorityQueue()
-        ped_list = []
-        auto_list = []
-        
-        #TODO: generate n aumobiles
-        #TODO: generate n pedestrians
-        
-        run();
+
+    #TODO: must handle any problems with  argument values and exit with descriptive non zero
+    
+    global n
+    global autoArrivalTracefile
+    global pedArrivalTracefile
+    global buttonpushTracefile
+    
+    n = sys.argv[1]
+    autoArrivalTracefile = sys.argv[2] #Uniform(0,1)
+    pedArrivalTracefile = sys.argv[3] #Uniform(0,1)
+    buttonpushTracefile = sys.argv[4] #Uniform(0,1)
+    
+    #TODO: generate n aumobiles
+    #TODO: generate n pedestrians
+    
+    run()
         
 def run():
-    t = 0#sim_time
+    t = 0 #sim_time
     
-    print 'Hello world';
+    print('Hello world')
     
     
     #while not event_list.empty(): #event_list non empty
@@ -63,4 +68,5 @@ def run():
     
 if __name__ == "__main__":
     main()
+
     
