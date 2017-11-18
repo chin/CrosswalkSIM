@@ -8,7 +8,10 @@ from classes import autos
 from classes import event
 
 import argparse
-import Queue as Q
+try:
+    import Queue as Q  # ver. < 3.0
+except ImportError:
+    import queue as Q
 
 #statistical imports
 import math
@@ -21,27 +24,43 @@ from statistics import median
 #import numpy as np
 
 
+#Global declarations
+global n;
+global autoArrivalSpeed;
+global pedArrivalSpeed;
+global crosswalkButtonPress;
+global event_list;
+global ped_list;
+global auto_list;
 
-
-
-n = sys.argv[1]
-autoAriivalSpeed = sys.argv[2] #Uniform(0,1)
-pedArrivalSpeed = sys.argv[3] #Uniform(0,1)
-crosswalkButtonPress = sys.argv[4] #Uniform(0,1)
-#TODO: must handle any problems with  argument values and exit with descriptive non zero
-
-
-
-#TODO: priority queues: notation is "put" and "get"
-event_list = Q.PriorityQueue()
-ped_list = []
-auto_list = []
-
-#TODO: generate n aumobiles
-#TODO: generate n pedestrians
-
-t = 0#sim_time
-
-
-while !events_list.empty(): #event_list non empty
-    e = events_list.pop(0)
+def main():
+    def __init__():
+        n = sys.argv[1]
+        autoArrivalSpeed = sys.argv[2] #Uniform(0,1)
+        pedArrivalSpeed = sys.argv[3] #Uniform(0,1)
+        crosswalkButtonPress = sys.argv[4] #Uniform(0,1)
+        #TODO: must handle any problems with  argument values and exit with descriptive non zero
+        
+        #TODO: priority queues: notation is "put" and "get"
+        event_list = Q.PriorityQueue()
+        ped_list = []
+        auto_list = []
+        
+        #TODO: generate n aumobiles
+        #TODO: generate n pedestrians
+        
+        run();
+        
+def run():
+    t = 0#sim_time
+    
+    print 'Hello world';
+    
+    
+    #while not event_list.empty(): #event_list non empty
+    #    e = event_list.pop(0)
+    
+    
+if __name__ == "__main__":
+    main()
+    

@@ -1,4 +1,5 @@
 #!/usr/bin/python
+from classes import event
 
 from enum import Enum
 
@@ -18,15 +19,15 @@ class safety_signals:
 
     #definitions for functions changing the safety signals
     def button_press(self):
-        if self.traffic_signal is GREEN:
+        if self.traffic_signal is trafficlight.GREEN:
             #if green timer expired
                 yellow_begins(self)
             #else
                 #green timer decrementing so in rightmost blue state
-        if self.traffic_signal is YELLOW:
+        if self.traffic_signal is trafficlight.YELLOW:
             #trigger yellow timer = 8s
 
-        if self.traffic_signal is RED:
+        if self.traffic_signal is trafficlight.RED:
             #if red timer not expired do nothing
 
         return self
@@ -39,7 +40,7 @@ class safety_signals:
             button_press(self)
 
     def yellow_begins(self):
-        self.traffic_signal = YELLOW
+        self.traffic_signal = trafficlight.YELLOW
         #yellow timer = 8s
 
         #this is when you calculate auto delay
@@ -51,22 +52,22 @@ class safety_signals:
         return self
 
     def yellow_expires(self):
-        self.crosswalk_signal = WALK
-        self.traffic_signal = RED
+        self.crosswalk_signal = crosswalksignal.WALK
+        self.traffic_signal = trafficlight.RED
 
     def red_expires(self):
-        self.crosswalk_signal = NO_WALK
-        self.traffic_signal = GREEN
+        self.crosswalk_signal = crosswalksignal.NO_WALK
+        self.traffic_signal = trafficlight.GREEN
         green_begins(self)
         return self
 
     def red_begins(self):
-        self.crosswalk_signal = WALK
+        self.crosswalk_signal = crosswalksignal.WALK
         # red timer = 18s: pedestians can walk
         return self
 
     def green_begins(self):
-        self.traffic_signal = GREEN
+        self.traffic_signal = trafficlight.GREEN
         #green timer = 35s
         return self
 
