@@ -1,10 +1,12 @@
 #!/usr/bin/python
 
-class crosswalksignal(ENUM):
+from enum import Enum
+
+class crosswalksignal(Enum):
     NO_WALK = 0
     WALK = 1
 
-class trafficlight(ENUM):
+class trafficlight(Enum):
     RED = 0
     YELLOW = 1
     GREEN = 2

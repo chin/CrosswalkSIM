@@ -1,6 +1,8 @@
 #!/usr/bin/python
 
-class event_type(ENUM):
+from enum import Enum
+
+class event_type(Enum):
     AUTO_ARRIVAL = 0
     PED_ARRIVAL = 1
     PED_AT_BUTTON = 2

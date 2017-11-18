@@ -4,4 +4,5 @@ class peds:
     def __init__(self, ):
         
 
-    def calculate_ped_delay:
+    def calculate_ped_delay(self):
+        
