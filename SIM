@@ -41,6 +41,11 @@ lineInAutoTrace = 0
 lineInPedTrace= 0
 lineInButtonTrace = 0
 
+#static
+rp = 3 #ped arrival rate in one direction
+ra = 4 #auto arrival rate
+
+
 
 def main():
     parseArgs()
@@ -58,38 +63,37 @@ def run():
     
     t = 0 #sim_time
     
-    print('Hello world')
-    
-    print("First three auto uniforms")
-    print(getNextAutoInterarrival())
-    print(getNextAutoInterarrival())
-    print(getNextAutoInterarrival())
-    
-    print("First three ped")
-    print(getNextPedInterarrival())
-    print(getNextPedInterarrival())
-    print(getNextPedInterarrival())
-    
-    print("First three button")
-    print(getNextButtonProb())
-    print(getNextButtonProb())
-    print(getNextButtonProb())
+    testFileInput()
     
     #while not event_list.empty(): #event_list non empty
     #    e = event_list.pop(0)
     
 
 def getNextAutoInterarrival():
-    #TODO CONVERT TO EXPONENTIAL
     u = readNextUniformInTrace(traceType.AUTO)
     u = float(u)
-    return u
+    return -ra*math.log(1.0 - u)
 
 def getNextPedInterarrival():
-    #TODO CONVERT TO EXPONENTIAL
     u = readNextUniformInTrace(traceType.PED)
     u = float(u)
-    return u
+    return -rp*math.log(1.0 - u)
+
+#Uniform(25,35) 
+def getNextAutoSpeed():
+    u = readNextUniformInTrace(traceType.AUTO)
+    u = float(u)
+    a = 25
+    b = 35
+    return a + u * (b - a)
+    
+#Uniform(2.6,4.1)
+def getNextPedSpeed():
+    u = readNextUniformInTrace(traceType.PED)
+    u = float(u)
+    a = 2.6
+    b = 4.1
+    return a + u * (b - a)
 
 def getNextButtonProb():
     #TODO CONVERT TO PROBABILITY VALUE CORRECTLY
@@ -182,6 +186,26 @@ def readFile(filename, lineInFile):
     
     return line
     
+    
+def testFileInput():
+    print('Hello world')
+    
+    print("First three auto uniforms")
+    print(getNextAutoInterarrival())
+    print(getNextAutoInterarrival())
+    print(getNextAutoInterarrival())
+    
+    print("First three ped")
+    print(getNextPedInterarrival())
+    print(getNextPedInterarrival())
+    print(getNextPedInterarrival())
+    
+    print("First three button")
+    print(getNextButtonProb())
+    print(getNextButtonProb())
+    print(getNextButtonProb())
+    
+
 if __name__ == "__main__":
     main()
 
