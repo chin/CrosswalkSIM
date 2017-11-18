@@ -1,5 +1,7 @@
 #!/usr/bin/python3
 import sys
+import os
+from enum import Enum
 
 #importing of the class files
 from classes import safety_signals
@@ -32,39 +34,153 @@ ped_list = []
 auto_list = []
 
 n = 0;
-autoArrivalTracefile = "";
-pedArrivalTracefile = "";
-buttonpushTracefile = "";
+autoTracefile = ""
+pedTracefile = ""
+buttonTracefile = ""
+lineInAutoTrace = 0
+lineInPedTrace= 0
+lineInButtonTrace = 0
 
 
 def main():
-
-    #TODO: must handle any problems with  argument values and exit with descriptive non zero
+    parseArgs()
+    run()
     
+        
+def run():
+    #Use globals
     global n
-    global autoArrivalTracefile
-    global pedArrivalTracefile
-    global buttonpushTracefile
-    
-    n = sys.argv[1]
-    autoArrivalTracefile = sys.argv[2] #Uniform(0,1)
-    pedArrivalTracefile = sys.argv[3] #Uniform(0,1)
-    buttonpushTracefile = sys.argv[4] #Uniform(0,1)
-    
+    global autoTracefile
+    global pedTracefile
+    global buttonTracefile
     #TODO: generate n aumobiles
     #TODO: generate n pedestrians
     
-    run()
-        
-def run():
     t = 0 #sim_time
     
     print('Hello world')
     
+    print("First three auto uniforms")
+    print(getNextAutoInterarrival())
+    print(getNextAutoInterarrival())
+    print(getNextAutoInterarrival())
+    
+    print("First three ped")
+    print(getNextPedInterarrival())
+    print(getNextPedInterarrival())
+    print(getNextPedInterarrival())
+    
+    print("First three button")
+    print(getNextButtonProb())
+    print(getNextButtonProb())
+    print(getNextButtonProb())
     
     #while not event_list.empty(): #event_list non empty
     #    e = event_list.pop(0)
     
+
+def getNextAutoInterarrival():
+    #TODO CONVERT TO EXPONENTIAL
+    u = readNextUniformInTrace(traceType.AUTO)
+    u = float(u)
+    return u
+
+def getNextPedInterarrival():
+    #TODO CONVERT TO EXPONENTIAL
+    u = readNextUniformInTrace(traceType.PED)
+    u = float(u)
+    return u
+
+def getNextButtonProb():
+    #TODO CONVERT TO PROBABILITY VALUE CORRECTLY
+    u = readNextUniformInTrace(traceType.BUTTON)
+    u = float(u)
+    return u
+
+class traceType(Enum):
+    AUTO = 0
+    PED = 1
+    BUTTON = 2
+
+def readNextUniformInTrace(traceCurrent):
+    if not isinstance(traceCurrent, traceType):
+        raise TypeError('Must be a trace type enum type')
+    
+    uniformRand = 0
+    global autoTracefile
+    global pedTracefile
+    global buttonTracefile
+    global lineInAutoTrace
+    global lineInPedTrace
+    global lineInButtonTrace
+    
+    if traceCurrent == traceType.AUTO:
+        uniformRand = readFile(autoTracefile, lineInAutoTrace)
+        lineInAutoTrace+= 1
+    elif traceCurrent == traceType.PED:
+        uniformRand = readFile(pedTracefile, lineInPedTrace)
+        lineInPedTrace+= 1
+    elif traceCurrent == traceType.BUTTON:
+        uniformRand = readFile(buttonTracefile, lineInButtonTrace)
+        lineInButtonTrace+= 1
+    
+    if (uniformRand == 0):
+        print("Uniform value not returned")
+        sys.exit(1)
+    
+    return uniformRand
+        
+
+def parseArgs():
+    #TODO: must handle any problems with  argument values and exit with descriptive non zero
+    #use globals!
+    global autoTracefile
+    global pedTracefile
+    global buttonTracefile
+    
+    #note that "SIM" counts as an arg
+    if len(sys.argv) != 5 :
+        print('Number of arguments:', len(sys.argv), 'arguments.')
+        print('Argument List:', str(sys.argv))
+        print("Usage: python3 SIM [1 2 3 4]\n \
+        1. N, the number of automobile and pedestrian arrivals to generate (N>0).\n \
+        2. A Uniform(0,1) trace file of random values for automobile arrivals and speeds.\n \
+        3. A Uniform(0,1) trace file of random values for pedestrian arrivals and speeds.\n \
+        4. A Uniform(0,1) trace file of random values for resolving crosswalk button presses.\n")
+        sys.exit (1)
+
+    n = int(sys.argv[1])
+    
+    if (n <= 0):
+        print("Need positive number of auto/pedestrian arrivals.")
+        sys.exit(1)
+    
+    autoTracefile = sys.argv[2] #Uniform(0,1)
+    pedTracefile = sys.argv[3] #Uniform(0,1)
+    buttonTracefile = sys.argv[4] #Uniform(0,1)
+    
+    readFile(autoTracefile, 0)
+    readFile(pedTracefile, 0)
+    readFile(buttonTracefile, 0)
+    
+    
+    
+def readFile(filename, lineInFile):
+    #filehandle = open(filename)
+    #print(filehandle.read())
+    #filehandle.close()
+    
+    fileDir = os.path.dirname(os.path.realpath('__file__'))
+    filename = os.path.join(fileDir, filename)
+    
+    #i starts at 0
+    with open(filename) as fp:
+        for i, line in enumerate(fp):
+            if i == lineInFile:
+                #print(line)
+                break
+    
+    return line
     
 if __name__ == "__main__":
     main()

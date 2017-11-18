@@ -35,11 +35,11 @@ from enum import Enum
 #WE WANT:
 
 class crosswalksignal(Enum):
-    RED_WALK
-    YELLOW_NO_WALK
-    GREEN_MANDATORY_PERIOD
-    GREEN_GO_YELLOW_ON_TIMER
-    GREEN_GO_YELLOW_ON_PRESS
+    RED_WALK = 0
+    YELLOW_NO_WALK = 1 
+    GREEN_MANDATORY_PERIOD = 2
+    GREEN_GO_YELLOW_ON_TIMER = 3
+    GREEN_GO_YELLOW_ON_PRESS = 4
 
 class safety_signals:
     def __init__(self, crosswalk_signal, traffic_signal, timer):
