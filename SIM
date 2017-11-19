@@ -192,22 +192,25 @@ def readFile(filename, lineInFile):
     
     
 def testFileInput():
-    print('Hello world')
+
+    print("Auto arrival test")
+    for i in range (0,100):
+        print(getNextAutoInterarrival())
     
-    print("First three auto uniforms")
-    print(getNextAutoInterarrival())
-    print(getNextAutoInterarrival())
-    print(getNextAutoInterarrival())
-    
-    print("First three ped")
-    print(getNextPedInterarrival())
-    print(getNextPedInterarrival())
-    print(getNextPedInterarrival())
-    
-    print("First three button")
-    print(getNextButtonProb())
-    print(getNextButtonProb())
-    print(getNextButtonProb())
+    #25 to 35  
+    print("\n\nAuto speed test")
+    for i in range (0,100):
+        print(getNextAutoSpeed())
+
+    print("\n\nPed arrival test")
+    for i in range (0,100):
+        print(getNextPedInterarrival())
+        
+    #Uniform(2.6,4.1)
+    print("\n\nPed speed test")
+    for i in range (0,100):
+        print(getNextPedSpeed())
+
     
 
 if __name__ == "__main__":
