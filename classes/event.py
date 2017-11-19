@@ -17,7 +17,25 @@ class event:
     def __init__(self, event_time, event_type, id):
         #event types are AUTO_ARRIVAL, PED_ARRIVAL, PED_AT_BUTTON, PED_IMPATIENT, GREEN_EXPIRES, YELLOW_EXPIRES, RED_EXPIRES, AUTO_EXIT, PED_EXIT
         self.time = event_time
-        self.type = event_type(event_type)
+        self.type = event_type
         self.id = id #the ID of the auto if AUTO_ARRIVAL/EXIT, or of ped if PED event
 
+    #custom comparator to queue in priority q based on event time
+    def __lt__(self, other):
+        return self.time < other.time
     
+    """
+    def __cmp__(self, other):
+        return self.cmp(self.time, other.time)
+    
+    def cmp(self, x, y):
+        #http://portingguide.readthedocs.io/en/latest/comparisons.html
+        
+        #Replacement for built-in funciton cmp that was removed in Python 3
+    
+        #Compare the two objects x and y and return an integer according to
+        #the outcome. The return value is negative if x < y, zero if x == y
+        #and strictly positive if x > y.
+    
+        return (x > y) - (x < y)
+    """

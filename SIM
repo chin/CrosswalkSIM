@@ -56,7 +56,7 @@ lineInPedTrace= 0
 lineInButtonTrace = 0
 pedNum = 1
 autoNum = 1
-event_type = event_type
+#eventType = event_type
 
 #static
 rp = 3 #ped arrival rate in one direction
@@ -120,7 +120,7 @@ def spawnAuto():
     
     auto_interarrival = getNextAutoInterarrival()
     auto_arrival = t + auto_interarrival
-    event_list._put(event(auto_arrival, event_type.AUTO_ARRIVAL, autoNum))
+    event_list._put(event.event(auto_arrival, event.event_type.AUTO_ARRIVAL, autoNum))
     
     
     
@@ -135,7 +135,7 @@ def spawnPed():
     
     ped_interarrival = getNextPedInterarrival()
     ped_arrival = t + ped_interarrival
-    event_list._put(event(ped_arrival, event_type.PED_ARRIVAL, pedNum))
+    event_list._put(event.event(ped_arrival, event.event_type.PED_ARRIVAL, pedNum))
     
     
     
