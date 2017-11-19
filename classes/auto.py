@@ -2,7 +2,7 @@
 #spawn next auto (peds arrivals spawn ped arrivals)
 #spawn its own exit event
 
-class autos:
+class auto:
     def __init__(self, arrivalTime, velocity, id):
     	self.arrivalTime = arrivalTime
     	self.velocity = velocity		#randomly decided speed

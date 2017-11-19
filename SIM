@@ -15,11 +15,12 @@ from enum import Enum
 
 #importing of the class files
 from classes import safety_signals
-from classes import peds 
-from classes import autos
+from classes import ped
+from classes import auto
 from classes import event
 
 import argparse
+from classes.event import event_type
 try:
     import Queue as Q  # ver. < 3.0
 except ImportError:
@@ -43,14 +44,19 @@ event_list = Q.PriorityQueue()
 peds_at_crosswalk = Q.PriorityQueue()
 ped_list = []
 auto_list = []
+red_light_times = [] #times when red light turned on
 
-n = 0;
+n = 0
+t = 0
 autoTracefile = ""
 pedTracefile = ""
 buttonTracefile = ""
 lineInAutoTrace = 0
 lineInPedTrace= 0
 lineInButtonTrace = 0
+pedNum = 1
+autoNum = 1
+event_type = event_type
 
 #static
 rp = 3 #ped arrival rate in one direction
@@ -68,22 +74,34 @@ def main():
 
 def run():
     #Use globals
-    global n
-    global autoTracefile
-    global pedTracefile
-    global buttonTracefile
-    
-    #Over the entire SIM:
     #TODO: generate n aumobiles
     #TODO: generate n pedestrians
+    global n
+    global t
+    global event_list
+    global peds_at_crosswalk
+    global ped_list
+    global auto_list
+    global pedNum
+    global autoNum
+    global red_light_times
+    
+    #initialize sim variables
+    t = 0 #sim_time
     
     #To begin, we will spawn the first auto and ped
     #when each arrival is processed, it spawns the next arrival of the same type
+    spawnAuto()
+    spawnPed()
+
+    
+
+
+
     
     
     
-    
-    t = 0 #sim_time
+
     
     testRandomValues()
     
@@ -95,15 +113,50 @@ def run():
 #-----------------------------------------------------------------------------------
     
 
+def spawnAuto():
+    global event_list
+    global auto_list
+    global autoNum
+    
+    auto_interarrival = getNextAutoInterarrival()
+    auto_arrival = t + auto_interarrival
+    event_list._put(event(auto_arrival, event_type.AUTO_ARRIVAL, autoNum))
+    
+    
+    
+    
+    autoNum += 1
+    
+def spawnPed():
+    global event_list
+    global peds_at_crosswalk
+    global ped_list
+    global pedNum
+    
+    ped_interarrival = getNextPedInterarrival()
+    ped_arrival = t + ped_interarrival
+    event_list._put(event(ped_arrival, event_type.PED_ARRIVAL, pedNum))
+    
+    
+    
+    
+    pedNum += 1
+    
+def exitAuto():
+    pass
+def exitPed():
+    pass
+
+
 def getNextAutoInterarrival():
     u = readNextUniformInTrace(traceType.AUTO)
     u = float(u)
-    return -ra*math.log(1.0 - u)
+    return -2*ra*math.log(1.0 - u)
 
 def getNextPedInterarrival():
     u = readNextUniformInTrace(traceType.PED)
     u = float(u)
-    return -rp*math.log(1.0 - u)
+    return -2*rp*math.log(1.0 - u)
 
 #Uniform(25,35) 
 def getNextAutoSpeed():

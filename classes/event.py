@@ -14,9 +14,10 @@ class event_type(Enum):
     PED_EXIT = 8
 
 class event:
-    def __init__(self, event_time, event_type):
+    def __init__(self, event_time, event_type, id):
         #event types are AUTO_ARRIVAL, PED_ARRIVAL, PED_AT_BUTTON, PED_IMPATIENT, GREEN_EXPIRES, YELLOW_EXPIRES, RED_EXPIRES, AUTO_EXIT, PED_EXIT
         self.time = event_time
         self.type = event_type(event_type)
+        self.id = id #the ID of the auto if AUTO_ARRIVAL/EXIT, or of ped if PED event
 
     

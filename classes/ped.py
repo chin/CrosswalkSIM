@@ -1,6 +1,6 @@
 
 
-class peds:
+class ped:
     def __init__(self, arrivalTime, velocity, id):
         self.arrivalTime = arrivalTime
         self.velocity = velocity        #randomly decided speed
