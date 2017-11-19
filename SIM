@@ -211,6 +211,9 @@ def testFileInput():
     for i in range (0,100):
         print(getNextPedSpeed())
 
+    print("\n\nUniform button press values")
+    for i in range (0,100):
+        print(getNext_ButtonTracefile_UniformRand())
     
 
 if __name__ == "__main__":
