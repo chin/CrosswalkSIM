@@ -73,7 +73,7 @@ def run():
     
     t = 0 #sim_time
     
-    testFileInput()
+    testRandomValues()
     
     #while not event_list.empty(): #event_list non empty
     #    e = event_list.pop(0)
@@ -212,7 +212,7 @@ def readFile(filename, lineInFile):
         sys.exit(1)
     
     
-def testFileInput():
+def testRandomValues():
 
     print("Auto arrival test")
     for i in range (0,100):
