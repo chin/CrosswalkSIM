@@ -120,10 +120,11 @@ def spawnAuto():
     
     auto_interarrival = getNextAutoInterarrival()
     auto_arrival = t + auto_interarrival
+    velocity = getNextAutoSpeed()
+    newAuto = auto.auto(auto_arrival, velocity, autoNum)
+    
     event_list._put(event.event(auto_arrival, event.event_type.AUTO_ARRIVAL, autoNum))
-    
-    
-    
+    auto_list.append(newAuto)
     
     autoNum += 1
     
@@ -135,10 +136,11 @@ def spawnPed():
     
     ped_interarrival = getNextPedInterarrival()
     ped_arrival = t + ped_interarrival
+    velocity = getNextPedSpeed()
+    newPed = ped.ped(ped_arrival, velocity, pedNum)
+
     event_list._put(event.event(ped_arrival, event.event_type.PED_ARRIVAL, pedNum))
-    
-    
-    
+    ped_list.append(newPed)
     
     pedNum += 1
     
