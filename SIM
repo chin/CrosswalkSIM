@@ -187,6 +187,7 @@ def readFile(filename, lineInFile):
     #print(filehandle.read())
     #filehandle.close()
     
+    relativeFilename = filename;
     fileDir = os.path.dirname(os.path.realpath('__file__'))
     filename = os.path.join(fileDir, filename)
     
@@ -200,7 +201,7 @@ def readFile(filename, lineInFile):
         
         
         if len(line.strip()) == 0 :
-            raise Exception('File ended prematurely')
+            raise Exception('File ended prematurely:', relativeFilename)
         
         return line
 
@@ -208,32 +209,34 @@ def readFile(filename, lineInFile):
         print("Could not read file:", filename)
         sys.exit(1)
     except Exception as err:
-        print(err.args[0])
+        print(err.args[0], err.args[1])
         sys.exit(1)
     
     
 def testRandomValues():
 
+    numTests = 5
+    
     print("Auto arrival test")
-    for i in range (0,100):
+    for i in range (0,numTests):
         print(getNextAutoInterarrival())
     
     #25 to 35  
     print("\n\nAuto speed test")
-    for i in range (0,100):
+    for i in range (0,numTests):
         print(getNextAutoSpeed())
 
     print("\n\nPed arrival test")
-    for i in range (0,100):
+    for i in range (0,numTests):
         print(getNextPedInterarrival())
         
     #Uniform(2.6,4.1)
     print("\n\nPed speed test")
-    for i in range (0,100):
+    for i in range (0,numTests):
         print(getNextPedSpeed())
 
     print("\n\nUniform button press values")
-    for i in range (0,100):
+    for i in range (0,numTests):
         print(getNext_ButtonTracefile_UniformRand())
     
 
