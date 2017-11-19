@@ -40,6 +40,7 @@ from statistics import median
 
 #TODO: priority queues: notation is "put" and "get"
 event_list = Q.PriorityQueue()
+peds_at_crosswalk = Q.PriorityQueue()
 ped_list = []
 auto_list = []
 
@@ -71,8 +72,16 @@ def run():
     global autoTracefile
     global pedTracefile
     global buttonTracefile
+    
+    #Over the entire SIM:
     #TODO: generate n aumobiles
     #TODO: generate n pedestrians
+    
+    #To begin, we will spawn the first auto and ped
+    #when each arrival is processed, it spawns the next arrival of the same type
+    
+    
+    
     
     t = 0 #sim_time
     
