@@ -8,8 +8,23 @@ class auto:
     	self.velocity = velocity		#randomly decided speed
     	self.id = id					#ID number/index, determined when auto spawns. Eastbound even, Westbound odd
 
+    def __str__(self):
+        return "Auto: arrival time %s velocity %s id %s" %(self.arrivalTime,self.velocity,self.id)
+
+    def exit_time_if_no_delay(self):
+        S = 46 #street = 46 ft
+        B = 330 #block = 330 ft
+        
+        dist = 7*B + 6*S
+        time = dist/self.velocity
+        exitTime = self.arrivalTime + time
+        return exitTime
+    
     def calculate_auto_delay(self):
-        pass
+        print("Calculating delay")
+        
+        #DON'T FORGET: sum variance and means using welford's eq
+        
         #determine if particular auto is delayed
     	#triggered on the YELLOW traffic signal in safety_signals class. Find two conditions:
 	    #Its back end will be past the farthest edge of the crosswalk in YELLOW seconds.

@@ -98,15 +98,22 @@ def run():
     spawnPed()
     
     while not event_list.empty(): #event_list non empty
-        e = event_list._get()
+        e = event_list._get() #remove current from event list
         
         t = e.time
-        print(t)
+        #print(t)
         
         if e.type == event.event_type.AUTO_ARRIVAL:
-            pass
+            #if auto arrival, spawn the next auto
+            #and schedule the exit of the current auto
+            spawnAuto()
+            scheduleExitAuto(e.id)
+            
         elif e.type == event.event_type.PED_ARRIVAL:
-            pass
+            spawnPed()
+            scheduleExitPed(e.id)
+            
+            
         elif e.type == event.event_type.PED_AT_BUTTON:
             pass
         elif e.type == event.event_type.PED_IMPATIENT:
@@ -118,9 +125,12 @@ def run():
         elif e.type == event.event_type.RED_EXPIRES:
             pass
         elif e.type == event.event_type.AUTO_EXIT:
-            pass
+            
+            exitAuto(e.id)
+            
         elif e.type == event.event_type.PED_EXIT:
-            pass
+            
+            exitPed(e.id)
     
 #-----------------------------------------------------------------------------------
 #End Main simulation
@@ -132,6 +142,10 @@ def spawnAuto():
     global auto_list
     global autoNum
     
+    #no spawns if exceed number
+    if (autoNum > n): 
+        return
+    
     auto_interarrival = getNextAutoInterarrival()
     auto_arrival = t + auto_interarrival
     velocity = getNextAutoSpeed()
@@ -142,11 +156,16 @@ def spawnAuto():
     
     autoNum += 1
     
+    print(str(newAuto))
+    
 def spawnPed():
     global event_list
     global peds_at_crosswalk
     global ped_list
     global pedNum
+    
+    if (pedNum > n): 
+        return
     
     ped_interarrival = getNextPedInterarrival()
     ped_arrival = t + ped_interarrival
@@ -158,9 +177,31 @@ def spawnPed():
     
     pedNum += 1
     
-def exitAuto():
+def scheduleExitAuto(id):
+    global event_list
+
+    for a in auto_list:
+        if a.id == id:
+            #if correct id, keep as "a"
+            break
+    
+    event_list._put(event.event(a.exit_time_if_no_delay(), event.event_type.AUTO_EXIT, a.id))
+    
+def scheduleExitPed(id):
     pass
-def exitPed():
+    
+def exitAuto(id):
+    global auto_list
+    
+    for a in auto_list:
+        if a.id == id:
+            auto_list.remove(a) #if correct id, remove from list of autos
+            break
+    
+    #CALCULATE DELAY
+    a.calculate_auto_delay()
+
+def exitPed(id):
     pass
 
 
@@ -237,6 +278,7 @@ def readNextUniformInTrace(traceCurrent):
 def parseArgs():
     #TODO: must handle any problems with  argument values and exit with descriptive non zero
     #use globals!
+    global n
     global autoTracefile
     global pedTracefile
     global buttonTracefile
