@@ -89,24 +89,38 @@ def run():
     #initialize sim variables
     t = 0 #sim_time
     
+    #TEST CODE    
+    testRandomValues()
+    
     #To begin, we will spawn the first auto and ped
     #when each arrival is processed, it spawns the next arrival of the same type
     spawnAuto()
     spawnPed()
-
     
-
-
-
-    
-    
-    
-
-    
-    testRandomValues()
-    
-    #while not event_list.empty(): #event_list non empty
-    #    e = event_list.pop(0)
+    while not event_list.empty(): #event_list non empty
+        e = event_list._get()
+        
+        t = e.time
+        print(t)
+        
+        if e.type == event.event_type.AUTO_ARRIVAL:
+            pass
+        elif e.type == event.event_type.PED_ARRIVAL:
+            pass
+        elif e.type == event.event_type.PED_AT_BUTTON:
+            pass
+        elif e.type == event.event_type.PED_IMPATIENT:
+            pass
+        elif e.type == event.event_type.GREEN_EXPIRES:
+            pass
+        elif e.type == event.event_type.YELLOW_EXPIRES:
+            pass
+        elif e.type == event.event_type.RED_EXPIRES:
+            pass
+        elif e.type == event.event_type.AUTO_EXIT:
+            pass
+        elif e.type == event.event_type.PED_EXIT:
+            pass
     
 #-----------------------------------------------------------------------------------
 #End Main simulation
@@ -309,8 +323,17 @@ def testRandomValues():
     print("\n\nUniform button press values")
     for i in range (0,numTests):
         print(getNext_ButtonTracefile_UniformRand())
+        
+    print("\n\n")
     
-
+    #Refresh bookmarks
+    global lineInAutoTrace
+    global lineInPedTrace
+    global lineInButtonTrace
+    lineInAutoTrace  =0
+    lineInPedTrace   =0
+    lineInButtonTrace=0
+    
 if __name__ == "__main__":
     main()
 
