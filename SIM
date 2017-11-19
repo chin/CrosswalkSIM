@@ -61,7 +61,10 @@ def main():
     parseArgs()
     run()
     
-        
+#-----------------------------------------------------------------------------------
+#Main simulation loop      
+#-----------------------------------------------------------------------------------
+
 def run():
     #Use globals
     global n
@@ -77,6 +80,10 @@ def run():
     
     #while not event_list.empty(): #event_list non empty
     #    e = event_list.pop(0)
+    
+#-----------------------------------------------------------------------------------
+#End Main simulation
+#-----------------------------------------------------------------------------------
     
 
 def getNextAutoInterarrival():
@@ -206,7 +213,7 @@ def readFile(filename, lineInFile):
         return line
 
     except IOError:
-        print("Could not read file:", filename)
+        print("Could not read file:", relativeFilename)
         sys.exit(1)
     except Exception as err:
         print(err.args[0], err.args[1])
