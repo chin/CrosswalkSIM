@@ -1,4 +1,14 @@
 #!/usr/bin/python3
+
+#NOTE: RUN FROM COMMAND LINE AS:
+#python3 SIM 10 sim-traces-0-1/uniform-0-1-00.dat sim-traces-0-1/uniform-0-1-01.dat sim-traces-0-1/uniform-0-1-02.dat
+
+#
+# Stacia Near and Chin ______
+# Simulation assignment
+# Crosswalk sim
+#
+
 import sys
 import os
 from enum import Enum
@@ -172,7 +182,6 @@ def parseArgs():
     readFile(buttonTracefile, 0)
     
     
-    
 def readFile(filename, lineInFile):
     #filehandle = open(filename)
     #print(filehandle.read())
@@ -181,14 +190,26 @@ def readFile(filename, lineInFile):
     fileDir = os.path.dirname(os.path.realpath('__file__'))
     filename = os.path.join(fileDir, filename)
     
-    #i starts at 0
-    with open(filename) as fp:
-        for i, line in enumerate(fp):
-            if i == lineInFile:
-                #print(line)
-                break
-    
-    return line
+    try:
+        #i starts at 0
+        with open(filename) as fp:
+            for i, line in enumerate(fp):
+                if i == lineInFile:
+                    #print(line)
+                    break
+        
+        
+        if len(line.strip()) == 0 :
+            raise Exception('File ended prematurely')
+        
+        return line
+
+    except IOError:
+        print("Could not read file:", filename)
+        sys.exit(1)
+    except Exception as err:
+        print(err.args[0])
+        sys.exit(1)
     
     
 def testFileInput():
