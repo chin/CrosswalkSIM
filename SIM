@@ -4,7 +4,7 @@
 #python3 SIM 10 sim-traces-0-1/uniform-0-1-00.dat sim-traces-0-1/uniform-0-1-01.dat sim-traces-0-1/uniform-0-1-02.dat
 
 #
-# Stacia Near and Chin ______
+# Stacia Near and Chin Isaac-Heslop
 # Simulation assignment
 # Crosswalk sim
 #
@@ -74,8 +74,7 @@ def main():
 
 def run():
     #Use globals
-    #TODO: generate n aumobiles
-    #TODO: generate n pedestrians
+    ## these variables are all used in the same function main so no need to describe as global since not used elsewhere without being passed
     global n
     global t
     global event_list
@@ -88,6 +87,7 @@ def run():
     
     #initialize sim variables
     t = 0 #sim_time
+    safetySignal = safety_signal( crosswalksignal.GREEN_GO_YELLOW_ON_PRESS )
     
     #TEST CODE    
     testRandomValues()
@@ -113,7 +113,6 @@ def run():
             spawnPed()
             scheduleExitPed(e.id)
             
-            
         elif e.type == event.event_type.PED_AT_BUTTON:
             pass
         elif e.type == event.event_type.PED_IMPATIENT:
@@ -123,14 +122,14 @@ def run():
         elif e.type == event.event_type.YELLOW_EXPIRES:
             pass
         elif e.type == event.event_type.RED_EXPIRES:
-            pass
+            
         elif e.type == event.event_type.AUTO_EXIT:
             
             exitAuto(e.id)
             
         elif e.type == event.event_type.PED_EXIT:
-            
             exitPed(e.id)
+            
     
 #-----------------------------------------------------------------------------------
 #End Main simulation
@@ -188,7 +187,12 @@ def scheduleExitAuto(id):
     event_list._put(event.event(a.exit_time_if_no_delay(), event.event_type.AUTO_EXIT, a.id))
     
 def scheduleExitPed(id):
-    pass
+    global event_list
+
+    for p in ped_list:
+        if p.id == id:
+            event_list.put( event.event( p.exit_time_if_no_delay(), event.event_type.PED_EXIT, p.id ) )
+            break
     
 def exitAuto(id):
     global auto_list
@@ -202,8 +206,12 @@ def exitAuto(id):
     a.calculate_auto_delay()
 
 def exitPed(id):
-    pass
-
+    global ped_list
+    for p in ped_list:
+        if p.id == id:
+            p.calculate_ped_delay()
+            ped_list.remove( p )
+            break
 
 def getNextAutoInterarrival():
     u = readNextUniformInTrace(traceType.AUTO)

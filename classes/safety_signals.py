@@ -1,8 +1,8 @@
 
 from classes import event
-
 from enum import Enum
-
+global event_list
+global pedNum
 
 #instead of storing walk light and traffic signal value
 #track the states of that state diagram
@@ -10,29 +10,6 @@ from enum import Enum
 #right is reqGreenLightWITHBUTTON, yellowOnExpire
 #middle is "buttonReady" triggerImmediatelyOnButtonPress, yellowOnPress
 
-
-#                 READ!
-#----------------------------------------------------------!!!!-----------------------------------------------------
-#-------------Keith basically told me how to do this
-#-------------he said don't use the below ones, we want to have
-#-------------an enum for every possible state in the state machine picture
-#-------------separate ones will be a big problem for us!!
-
-
-#GET RID OF THESE:
-
-
-#class crosswalksignal(Enum):
-#    NO_WALK = 0
-#    WALK = 1
-
-#class trafficlight(Enum):
-#    RED = 0
-#    YELLOW = 1
-#    GREEN = 2
-
-
-#WE WANT:
 
 class crosswalksignal(Enum):
     RED_WALK = 0
@@ -42,39 +19,39 @@ class crosswalksignal(Enum):
     GREEN_GO_YELLOW_ON_PRESS = 4
 
 class safety_signals:
-    def __init__(self, crosswalk_signal, traffic_signal, timer):
-        self.crosswalk_signal = crosswalksignal(crosswalk_signal) #WALK || NO_WALK
-        self.traffic_signal = trafficsignal(traffic_light) #RED || YELLOW || GREEN
+    def __init__(self, signal):
+        self.safetySignal = crosswalksignal.GREEN_MANDATORY_PERIOD
 
+    def change_signal( self, signal ):
+        self.safetySignal = signal
+       
     #definitions for functions changing the safety signals
     def button_press(self):
-        if self.traffic_signal is trafficlight.GREEN:
-            pass
-            #if green timer expired
-                #yellow_begins(self)
-            #else
-                #green timer decrementing so in rightmost blue state
-        if self.traffic_signal is trafficlight.YELLOW:
-            #trigger yellow timer = 8s
+        if self.safetySignal is crosswalksignal.GREEN_GO_YELLOW_ON_PRESS:
+            yellow_begins(self)
+        
+        elif self.safetySignal is crosswalksignal.GREEN_YELLOW_ON_TIMER:
+            yellow_begins(self)
+        
+        elif self.safetySignal is crosswalksignal.YELLOW_NO WALK:
             pass
 
-        if self.traffic_signal is trafficlight.RED:
-            #if red timer not expired do nothing
+        elif self.safetySignal is crosswalksignal.RED_WALK:
             pass
 
         return self
 
 
     def ped_at_button(self):
-        if self.traffic_signal is trafficlight.RED:
+        if self.safetySignal is crosswalksignal.RED_WALK:
             pass
-            #walk
+            # check if can walk
         else:
             button_press(self)
 
     def yellow_begins(self):
-        self.traffic_signal = trafficlight.YELLOW
-        #yellow timer = 8s
+        self.safetySignal = crosswalksignal.YELLOW_NO_WALK
+        event_list.put( event( t + 8, event.event_type.YELLOW_EXPIRES, pedNum) )#yellow timer = 8s
 
         #this is when you calculate auto delay
         #TODO is this right?
@@ -85,26 +62,29 @@ class safety_signals:
         return self
 
     def yellow_expires(self):
-        self.crosswalk_signal = crosswalksignal.WALK
-        self.traffic_signal = trafficlight.RED
+        red_begins(self)
+        return self
 
     def red_expires(self):
-        self.crosswalk_signal = crosswalksignal.NO_WALK
-        self.traffic_signal = trafficlight.GREEN
+        self.safetySignal = crosswalksignal.GREEN_MANDATORY_PERIOD
         green_begins(self)
         return self
 
     def red_begins(self):
-        self.crosswalk_signal = crosswalksignal.WALK
-        # red timer = 18s: pedestians can walk
+        self.safetySignal = crosswalksignal.RED_WALK
+        event_list.put( event( t + 18, event.event_type.RED_EXPIRES, pedNum ) )#red timer = 18s: pedestians can walk
         return self
 
     def green_begins(self):
-        self.traffic_signal = trafficlight.GREEN
-        #green timer = 35s
+        self.safetySignal = crosswalksignal.GREEN_MANDATORY_PERIOD
+        event_list( event( t + 35, event.event_type.GREEN_EXPIRES, pedNum ) )#green timer = 35s
         return self
 
     def green_expires(self):
+        if self.safetySignal is crosswalksignal.GREEN_MANDATORY_PERIOD:
+            self.safetySignal = crosswalksignal.GREEN_GO_YELLOW_ON_PRESS
+        elif self.safetySignal is crosswalksignal.GREEN_YELLOW_ON_TIMER:
+            pass
         return self
 
    
