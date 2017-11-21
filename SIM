@@ -41,6 +41,7 @@ from statistics import median
 
 #TODO: priority queues: notation is "put" and "get"
 event_list = Q.PriorityQueue()
+s.event_list = event_list
 peds_at_crosswalk = Q.PriorityQueue()
 ped_list = []
 auto_list = []
@@ -98,7 +99,7 @@ def run():
     spawnPed()
     
     while not event_list.empty(): #event_list non empty
-        e = event_list._get() #remove current from event list
+        e = event_list.get() #remove current from event list
         
         t = e.time
         #print(t)
@@ -111,7 +112,7 @@ def run():
             
         elif e.type == event.event_type.PED_ARRIVAL:
             spawnPed()
-            scheduleExitPed(e.id)
+            #scheduleExitPed(e.id)
             s.safety_signals.button_press( safetySignal )            
 
         elif e.type == event.event_type.PED_AT_BUTTON:
@@ -188,15 +189,17 @@ def scheduleExitAuto(id):
     for a in auto_list:
         if a.id == id:
             #if correct id, keep as "a"
+            #TODO these should all be before the break
+            event_list._put(event.event(a.exit_time_if_no_delay(), event.event_type.AUTO_EXIT, a.id))
             break
     
-    event_list._put(event.event(a.exit_time_if_no_delay(), event.event_type.AUTO_EXIT, a.id))
     
 def scheduleExitPed(id):
     global event_list
 
     for p in ped_list:
         if p.id == id:
+            #TODO make it actual exit time not exit time with no delay
             event_list.put( event.event( p.exit_time_if_no_delay(), event.event_type.PED_EXIT, p.id ) )
             break
     

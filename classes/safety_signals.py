@@ -1,8 +1,6 @@
 
 from classes import event
 from enum import Enum
-global event_list
-global pedList
 
 #instead of storing walk light and traffic signal value
 #track the states of that state diagram
@@ -10,6 +8,10 @@ global pedList
 #right is reqGreenLightWITHBUTTON, yellowOnExpire
 #middle is "buttonReady" triggerImmediatelyOnButtonPress, yellowOnPress
 
+#The pointer to the global event_list
+#will be passed in to this variable
+#from SIM when it initializes
+event_list = None
 
 class crosswalksignal(Enum):
     RED_WALK = 0
@@ -30,7 +32,7 @@ class safety_signals:
         if self.safetySignal is crosswalksignal.GREEN_GO_YELLOW_ON_PRESS:
             yellow_begins(self)
             
-        elif self.safetySignal is crosswalksignal.GREEN_YELLOW_ON_TIMER:
+        elif self.safetySignal is crosswalksignal.GREEN_GO_YELLOW_ON_TIMER:
             yellow_begins(self)
         
         elif self.safetySignal is crosswalksignal.YELLOW_NO_WALK:
@@ -59,7 +61,7 @@ class safety_signals:
         #TODO is this right?
         #-----------------------------------------------------??
         for a in auto_list:
-            calculate_auto_delay
+           calculate_auto_delay
 
         return self
 
@@ -68,7 +70,6 @@ class safety_signals:
         return self
 
     def red_expires(self):
-        self.safetySignal = crosswalksignal.GREEN_MANDATORY_PERIOD
         green_begins(self)
         return self
 
@@ -85,7 +86,7 @@ class safety_signals:
     def green_expires(self):
         if self.safetySignal is crosswalksignal.GREEN_MANDATORY_PERIOD:
             self.safetySignal = crosswalksignal.GREEN_GO_YELLOW_ON_PRESS
-        elif self.safetySignal is crosswalksignal.GREEN_YELLOW_ON_TIMER:
+        elif self.safetySignal is crosswalksignal.GREEN_GO_YELLOW_ON_TIMER:
             pass
         return self
 
