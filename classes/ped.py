@@ -3,7 +3,7 @@ class ped:
     B = 330
     S = 46
     w = 24
-    dist = B + S + w
+    global dist = B + S + w
 
     def __init__(self, arrivalTime, velocity, id):
         self.arrivalTime = arrivalTime
@@ -13,12 +13,12 @@ class ped:
 
     def calculate_ped_delay(self, exitTime):
         time = exitTime - self.arrivalTime
-        minTime = dist/self.velocity
+        minTime = self.dist/self.velocity
         D_p = time - minTime
         return D_p 
         
     def exit_time_if_no_delay(self):
-        time = dist/self.velocity
+        time = self.dist/self.velocity
         exitTime = self.arrivalTime + time
         return exitTime
 
