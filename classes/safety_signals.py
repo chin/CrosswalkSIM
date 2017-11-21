@@ -33,7 +33,7 @@ class safety_signals:
         elif self.safetySignal is crosswalksignal.GREEN_YELLOW_ON_TIMER:
             yellow_begins(self)
         
-        elif self.safetySignal is crosswalksignal.YELLOW_NO WALK:
+        elif self.safetySignal is crosswalksignal.YELLOW_NO_WALK:
             pass
 
         elif self.safetySignal is crosswalksignal.RED_WALK:
