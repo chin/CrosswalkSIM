@@ -11,7 +11,7 @@ class ped:
         self.id = id                    #ID number/index, determined when ped spawns. Eastbound even, Westbound odd
 
 
-    def calculate_ped_delay(self, exiTime):
+    def calculate_ped_delay(self, exitTime):
         time = exitTime - self.arrivalTime
         minTime = dist/self.velocity
         D_p = time - minTime
