@@ -361,23 +361,19 @@ def testRandomValues():
 
     numTests = 5
     
-    print("Auto arrival test")
-    for i in range (0,numTests):
-        print(getNextAutoInterarrival())
-    
-    #25 to 35  
-    print("\n\nAuto speed test")
-    for i in range (0,numTests):
-        print(getNextAutoSpeed())
+    print("Auto test")
+    for i in range (0,numTests*2):
+        if i % 2 == 0: #even 
+            print('Interarrival', getNextAutoInterarrival(), end='  ')
+        else: #odd
+            print('Speed', getNextAutoSpeed())
 
-    print("\n\nPed arrival test")
-    for i in range (0,numTests):
-        print(getNextPedInterarrival())
-        
-    #Uniform(2.6,4.1)
-    print("\n\nPed speed test")
-    for i in range (0,numTests):
-        print(getNextPedSpeed())
+    print("\n\nPed test")
+    for i in range (0,numTests*2):
+        if i % 2 == 0: #even 
+            print('Interarrival', getNextPedInterarrival(), end='  '),
+        else: #odd
+            print('Speed', getNextPedSpeed())
 
     print("\n\nUniform button press values")
     for i in range (0,numTests):
