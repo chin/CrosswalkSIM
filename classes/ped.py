@@ -3,7 +3,7 @@ class ped:
     B = 330
     S = 46
     w = 24
-    dist = B + 2*S + 0.5*w
+    dist = B + S + w
 
     def __init__(self, arrivalTime, velocity, id):
         self.arrivalTime = arrivalTime

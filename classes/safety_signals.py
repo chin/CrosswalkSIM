@@ -42,7 +42,7 @@ class safety_signals:
         return self
 
 
-    def ped_at_button(self):
+    def ped_at_button(self, ped ):#ped is an event with the
         if self.safetySignal is crosswalksignal.RED_WALK:
             pass
             # check if can walk

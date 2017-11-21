@@ -114,15 +114,20 @@ def run():
             scheduleExitPed(e.id)
             
         elif e.type == event.event_type.PED_AT_BUTTON:
-            pass
+            safety_signals.ped_at_button(safetySignal, e )
+
         elif e.type == event.event_type.PED_IMPATIENT:
-            pass
+           safet_signals.button_press( safetySignal )
+
         elif e.type == event.event_type.GREEN_EXPIRES:
-            pass
+            safety_signals.green_expires( safetySignal )
+
         elif e.type == event.event_type.YELLOW_EXPIRES:
-            pass
+            safety_signals.yellow_expires( safetySignal )
+
         elif e.type == event.event_type.RED_EXPIRES:
-            
+            safety_signals.red_expires( safetySignals )
+
         elif e.type == event.event_type.AUTO_EXIT:
             
             exitAuto(e.id)
