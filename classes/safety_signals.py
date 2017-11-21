@@ -12,6 +12,7 @@ from enum import Enum
 #will be passed in to this variable
 #from SIM when it initializes
 event_list = None
+pedNum = None
 
 class crosswalksignal(Enum):
     RED_WALK = 0
