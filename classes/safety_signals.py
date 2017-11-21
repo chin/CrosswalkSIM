@@ -37,8 +37,9 @@ class safety_signals:
             pass
 
         elif self.safetySignal is crosswalksignal.RED_WALK:
-            for ped in pedList:
-                if #ped can cross then it should
+            pass
+            #for ped in pedList:
+            #    if #ped can cross then it should
 
         return self
 
