@@ -2,7 +2,7 @@
 from classes import event
 from enum import Enum
 global event_list
-global pedNum
+global pedList
 
 #instead of storing walk light and traffic signal value
 #track the states of that state diagram
@@ -26,10 +26,10 @@ class safety_signals:
         self.safetySignal = signal
        
     #definitions for functions changing the safety signals
-    def button_press(self):
+    def button_press( self ):
         if self.safetySignal is crosswalksignal.GREEN_GO_YELLOW_ON_PRESS:
             yellow_begins(self)
-        
+            
         elif self.safetySignal is crosswalksignal.GREEN_YELLOW_ON_TIMER:
             yellow_begins(self)
         
@@ -37,12 +37,13 @@ class safety_signals:
             pass
 
         elif self.safetySignal is crosswalksignal.RED_WALK:
-            pass
+            for ped in pedList:
+                if #ped can cross then it should
 
         return self
 
 
-    def ped_at_button(self, ped ):#ped is an event with the
+    def ped_at_button( self ):#ped is an event with the
         if self.safetySignal is crosswalksignal.RED_WALK:
             pass
             # check if can walk
