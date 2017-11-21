@@ -368,18 +368,18 @@ def testRandomValues():
         else: #odd
             print('Speed', getNextAutoSpeed())
 
-    print("\n\nPed test")
+    print("\nPed test")
     for i in range (0,numTests*2):
         if i % 2 == 0: #even 
             print('Interarrival', getNextPedInterarrival(), end='  '),
         else: #odd
             print('Speed', getNextPedSpeed())
 
-    print("\n\nUniform button press values")
+    print("\nUniform button press values")
     for i in range (0,numTests):
         print(getNext_ButtonTracefile_UniformRand())
         
-    print("\n\n")
+    print("\nReturning to beginning of input files.\n\n")
     
     #Refresh bookmarks
     global lineInAutoTrace
