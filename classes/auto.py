@@ -20,7 +20,7 @@ class auto:
         exitTime = self.arrivalTime + time
         return exitTime
     
-    def calculate_auto_delay(self):
+    def calculate_auto_delay(self, timeYellow):
         print("Calculating delay")
         
         #DON'T FORGET: sum variance and means using welford's eq

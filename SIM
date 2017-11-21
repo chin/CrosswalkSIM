@@ -109,7 +109,10 @@ def run():
             #if auto arrival, spawn the next auto
             #and schedule the exit of the current auto
             spawnAuto()
-            scheduleExitAuto(e.id)
+            
+            #Schedule auto exit in safety signal instead
+            #trigger on yellow and calculate delay
+            #scheduleExitAuto(e.id)
             
         elif e.type == event.event_type.PED_ARRIVAL:
             spawnPed()
@@ -127,6 +130,16 @@ def run():
 
         elif e.type == event.event_type.YELLOW_EXPIRES:
             s.safety_signals.yellow_expires( safetySignal )
+
+            #Calculate auto delay on yellow
+            #schedule exit events for all active autos
+            time_yellow_began = t - 8; #yellow lasts 8 sec
+            
+            for a in auto_list:
+                delay = a.calculate_auto_delay(time_yellow_began)
+                scheduleExitAuto(a.id, a.exit_time_if_no_delay() + delay)
+                
+                #TODO WELFORDS EQUATIONS
 
         elif e.type == event.event_type.RED_EXPIRES:
             s.safety_signals.red_expires( safetySignal )
@@ -184,14 +197,14 @@ def spawnPed():
     
     pedNum += 1
     
-def scheduleExitAuto(id):
+def scheduleExitAuto(id, true_exit_time):
     global event_list
 
     for a in auto_list:
         if a.id == id:
             #if correct id, keep as "a"
             #TODO these should all be before the break
-            event_list._put(event.event(a.exit_time_if_no_delay(), event.event_type.AUTO_EXIT, a.id))
+            event_list._put(event.event(true_exit_time, event.event_type.AUTO_EXIT, a.id))
             break
     
     

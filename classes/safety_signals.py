@@ -58,12 +58,6 @@ class safety_signals:
         self.safetySignal = crosswalksignal.YELLOW_NO_WALK
         event_list.put( event( t + 8, event.event_type.YELLOW_EXPIRES, pedNum) )#yellow timer = 8s
 
-        #this is when you calculate auto delay
-        #TODO is this right?
-        #-----------------------------------------------------??
-        for a in auto_list:
-           calculate_auto_delay
-
         return self
 
     def yellow_expires(self):
