@@ -31,6 +31,17 @@ class auto:
 	    #Its front end will have not reached the near edge of the crosswalk in (YELLOW + RED) seconds. 
 		#If both of these conditions are false, the auto will be delayed; otherwise the auto is not delayed at the crosswalk.
         
+        length = 9 #9ft length of auto
+        isDelayed = False
+        
+        
+        
+        
+        
+        
+        
+        
+        #If doing it with a list of red lights
         #HOW TO ORCHESTRATE THIS LOGIC:
         #remember in a separate list all the times that a red light turns on (maybe also when it turns off)
         #yellow light does not matter in computations

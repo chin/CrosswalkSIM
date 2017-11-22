@@ -45,7 +45,8 @@ s.event_list = event_list
 peds_at_crosswalk = Q.PriorityQueue()
 ped_list = []
 auto_list = []
-red_light_times = [] #times when red light turned on
+#might not need red light times
+#red_light_times = [] #times when red light turned on
 
 n = 0
 t = 0
@@ -133,7 +134,7 @@ def run():
 
             #Calculate auto delay on yellow
             #schedule exit events for all active autos
-            time_yellow_began = t - 8; #yellow lasts 8 sec
+            time_yellow_began = t - 8; #yellow lasts 8 sec, and it just expired at t
             
             for a in auto_list:
                 delay = a.calculate_auto_delay(time_yellow_began)
@@ -226,7 +227,7 @@ def exitAuto(id):
             break
     
     #CALCULATE DELAY
-    a.calculate_auto_delay()
+    #a.calculate_auto_delay()
 
 def exitPed(id):
     global ped_list
