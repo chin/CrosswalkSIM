@@ -16,7 +16,7 @@ from enum import Enum
 #importing of the class files
 from classes import safety_signals as s
 from classes import ped
-from classes import auto
+from classes import auto as a
 from classes import event
 
 import argparse
@@ -156,7 +156,14 @@ def run():
 #-----------------------------------------------------------------------------------
 #End Main simulation
 #-----------------------------------------------------------------------------------
-    
+
+#TODO
+#welford
+def track_statistics(delay, statType):
+    if(statType == 'auto delay'):
+        pass
+    elif(statType == 'ped delay'):
+        pass
 
 def spawnAuto():
     global event_list

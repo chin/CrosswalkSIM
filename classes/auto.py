@@ -20,27 +20,81 @@ class auto:
         exitTime = self.arrivalTime + time
         return exitTime
     
-    def calculate_auto_delay(self, timeYellow):
+    def calculate_auto_delay(self, yellow_begins_time):
         print("Calculating delay")
         
         #DON'T FORGET: sum variance and means using welford's eq
         
         #determine if particular auto is delayed
-    	#triggered on the YELLOW traffic signal in safety_signals class. Find two conditions:
-	    #Its back end will be past the farthest edge of the crosswalk in YELLOW seconds.
-	    #Its front end will have not reached the near edge of the crosswalk in (YELLOW + RED) seconds. 
-		#If both of these conditions are false, the auto will be delayed; otherwise the auto is not delayed at the crosswalk.
+    	#triggered on the YELLOW traffic signal in safety_signals class. 
         
-        length = 9 #9ft length of auto
-        isDelayed = False
+        delay = None
+        auto_length = 9 #9ft length of auto
+        yellow_duration = 8 #8 sec yellow
+        red_duration = 18 #18 sec red light
         
+        B = 330
+        S= 46
+        crosswalk_width = 24
+        sim_total_dist = 7*B + 6*S
+        middle_of_crosswalk = sim_total_dist/2
         
+        #Near end is to the left. The left side of simulation is distance/length 0
+        #with increasing numbers towards the right
+        crosswalk_far_end = middle_of_crosswalk + crosswalk_width/2
+        crosswalk_near_end = middle_of_crosswalk - crosswalk_width/2
         
+        #start at zero
+        #travel happens starting at arrival time
+        travel_time_before_yellow = yellow_begins_time - self.arrivalTime
         
+        back_end_dist_yellow_ends = self.velocity * (travel_time_before_yellow + yellow_duration) - auto_length
+        front_end_dist_red_ends = self.velocity * (travel_time_before_yellow + yellow_duration + red_duration)
         
+
+        #Find two conditions:
+        #Its back end will be past the farthest edge of the crosswalk in YELLOW seconds.
+        #Its front end will have not reached the near edge of the crosswalk in (YELLOW + RED) seconds. 
+        #If both of these conditions are false, the auto will be delayed; otherwise the auto is not delayed at the crosswalk.
+      
+        got_across_before_red = True
+        arrived_after_light_green = True
+                
+        if (back_end_dist_yellow_ends < crosswalk_far_end): 
+            got_across_before_red = False
+        if (front_end_dist_red_ends > crosswalk_near_end):
+            arrived_after_light_green = False
+
+        if (not got_across_before_red and not arrived_after_light_green):
+            delay = 0
+            track_statistics(delay, 'auto delay')
+            return delay #not delayed
         
+        #If the car is delayed, you have to calculate by how much
+    
+        vj = self.velocity
+        a = 10 #ft/s/s acceleration
+        bj = vj^2 / (2*a)
+        tj = vj/a
+        ej = self.arrivalTime
+        w = 24 #ft wide crosswalk
         
+        halt_at_crosswalk_time = ej + (7/2*B + 3*S - w/2 - bj)/vj + tj
+        light_turns_green_time = yellow_begins_time + yellow_duration + red_duration
         
+        time_at_full_speed = (7*B + 6*S - 2*bj) /vj
+        time_changing_speed = 2*tj
+        time_stopped = light_turns_green_time - halt_at_crosswalk_time
+        
+        total_time_if_delay = time_at_full_speed + time_changing_speed + time_stopped
+        exit_time_if_delay = self.arrivalTime + total_time_if_delay
+        
+        delay = exit_time_if_delay - self.exit_time_if_no_delay()
+        track_statistics(delay, 'auto delay')
+        return delay
+        
+
+
         #If doing it with a list of red lights
         #HOW TO ORCHESTRATE THIS LOGIC:
         #remember in a separate list all the times that a red light turns on (maybe also when it turns off)
