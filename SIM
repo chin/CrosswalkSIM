@@ -16,7 +16,7 @@ from enum import Enum
 #importing of the class files
 from classes import safety_signals as s
 from classes import ped
-from classes import auto as a
+from classes import auto as auto
 from classes import event
 
 import argparse
