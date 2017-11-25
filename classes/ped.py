@@ -3,7 +3,7 @@ class ped:
     B = 330
     S = 46
     w = 24
-    dist = B + S + w
+    dist = B + S + wx
 
     def __init__(self, arrivalTime, velocity, id):
         self.arrivalTime = arrivalTime
@@ -21,5 +21,9 @@ class ped:
         time = self.dist/self.velocity
         exitTime = self.arrivalTime + time
         return exitTime
-
     
+    def can_cross(self):
+        return (( self.w/self.velocity ) >= 0 )
+
+    def exit_time(self):
+        retrun ( self.w/self.velocity )

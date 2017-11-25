@@ -1,5 +1,6 @@
 
-from classes import event
+from classes import event as e
+from classes import ped as p
 from enum import Enum
 
 #instead of storing walk light and traffic signal value
@@ -13,6 +14,7 @@ from enum import Enum
 #from SIM when it initializes
 event_list = None
 pedNum = None
+ped_list = None
 
 class crosswalksignal(Enum):
     RED_WALK = 0
@@ -31,7 +33,8 @@ class safety_signals:
     #definitions for functions changing the safety signals
     def button_press( self ):
         if self.safetySignal is crosswalksignal.GREEN_GO_YELLOW_ON_PRESS:
-            yellow_begins(self)
+            if walk_request_pushed():
+                yellow_begins(self)
             
         elif self.safetySignal is crosswalksignal.GREEN_GO_YELLOW_ON_TIMER:
             yellow_begins(self)
@@ -40,17 +43,17 @@ class safety_signals:
             pass
 
         elif self.safetySignal is crosswalksignal.RED_WALK:
-            pass
-            #for ped in pedList:
-            #    if #ped can cross then it should
+            for ped in ped_list:
+                if p.ped.can_cross( ped ):#ped can cross then it should
+                    event_list.put( e.event( t + p.ped.cross_time( ped ) + p.ped.exit_time( ped ), ped.id ) )
 
         return self
 
 
     def ped_at_button( self ):#ped is an event with the
         if self.safetySignal is crosswalksignal.RED_WALK:
-            pass
-            # check if can walk
+            if walk_request_pushed:
+                if can_walk():
         else:
             button_press(self)
 
@@ -85,6 +88,10 @@ class safety_signals:
             pass
         return self
 
-   
+    def can_walk(speed):
+        return (speed)
+
+
+    def walk_request_pushed():
 
 
