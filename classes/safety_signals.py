@@ -15,6 +15,7 @@ from enum import Enum
 event_list = None
 pedNum = None
 ped_list = None
+t = None # simulation time
 
 class crosswalksignal(Enum):
     RED_WALK = 0
@@ -27,13 +28,13 @@ class safety_signals:
     def __init__(self, signal):
         self.safetySignal = crosswalksignal.GREEN_MANDATORY_PERIOD
 
-    def change_signal( self, signal ):
+    def change_signal(self, signal):
         self.safetySignal = signal
        
     #definitions for functions changing the safety signals
     def button_press( self ):
         if self.safetySignal is crosswalksignal.GREEN_GO_YELLOW_ON_PRESS:
-            if walk_request_pushed():
+            if walk_request_pushed( len(ped_list) ):
                 yellow_begins(self)
             
         elif self.safetySignal is crosswalksignal.GREEN_GO_YELLOW_ON_TIMER:
@@ -43,23 +44,26 @@ class safety_signals:
             pass
 
         elif self.safetySignal is crosswalksignal.RED_WALK:
-            for ped in ped_list:
-                if p.ped.can_cross( ped ):#ped can cross then it should
-                    event_list.put( e.event( t + p.ped.cross_time( ped ) + p.ped.exit_time( ped ), ped.id ) )
+            for peds in ped_list:
+                if p.ped.can_cross( peds ):#ped can cross then it should
+                    event_list.put( e.event( t + p.ped.exit_time( peds ), e.event.event_type.PED_EXIT, peds.id ) )
 
         return self
 
 
     def ped_at_button( self ):#ped is an event with the
         if self.safetySignal is crosswalksignal.RED_WALK:
-            if walk_request_pushed:
-                if can_walk():
+            if walk_request_pushed( len(ped_list) ): #need to check here??
+                for peds in ped_list:
+                    if p.ped.can_cross( peds ):
+                        event_list.put( e.event( t + p.ped.exit_time( peds ), e.event.event_type.PED_EXIT, peds.id ) )
+
         else:
             button_press(self)
 
     def yellow_begins(self):
         self.safetySignal = crosswalksignal.YELLOW_NO_WALK
-        event_list.put( event( t + 8, event.event_type.YELLOW_EXPIRES, pedNum) )#yellow timer = 8s
+        event_list.put( e.event( t + 8, e.event.event_type.YELLOW_EXPIRES, pedNum) )#yellow timer = 8s
 
         return self
 
@@ -73,12 +77,12 @@ class safety_signals:
 
     def red_begins(self):
         self.safetySignal = crosswalksignal.RED_WALK
-        event_list.put( event( t + 18, event.event_type.RED_EXPIRES, pedNum ) )#red timer = 18s: pedestians can walk
+        event_list.put( e.event( t + 18, e.event.event_type.RED_EXPIRES, pedNum ) )#red timer = 18s: pedestians can walk
         return self
 
     def green_begins(self):
         self.safetySignal = crosswalksignal.GREEN_MANDATORY_PERIOD
-        event_list( event( t + 35, event.event_type.GREEN_EXPIRES, pedNum ) )#green timer = 35s
+        event_list( e.event( t + 35, e.event.event_type.GREEN_EXPIRES, pedNum ) )#green timer = 35s
         return self
 
     def green_expires(self):
@@ -88,10 +92,19 @@ class safety_signals:
             pass
         return self
 
-    def can_walk(speed):
-        return (speed)
+    def button_prob(n):
+        if n is 0:
+            return (15/16)
+        else: # n > 0
+            return (1/(n+1))
+
+    def walk_request_pushed(n):
+        u = getNext_ButtonTracefile_UniformRand() #def from SIM file
+        if u < button_prob(n):
+            return True
+        else:
+            return False
 
 
-    def walk_request_pushed():
-
+    
 
