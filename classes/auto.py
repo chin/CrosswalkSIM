@@ -2,7 +2,7 @@
 #spawn next auto (peds arrivals spawn ped arrivals)
 #spawn its own exit event
 
-import SIM as s
+from classes import stats as st
 
 class auto:
     def __init__(self, arrivalTime, velocity, id):
@@ -69,7 +69,7 @@ class auto:
 
         if (not got_across_before_red and not arrived_after_light_green):
             delay = 0
-            s.track_statistics(delay, 'auto delay')
+            st.stats.track_statistics(delay, 'auto delay')
             return delay #not delayed
         
         #If the car is delayed, you have to calculate by how much
@@ -92,7 +92,7 @@ class auto:
         exit_time_if_delay = self.arrivalTime + total_time_if_delay
         
         delay = exit_time_if_delay - self.exit_time_if_no_delay()
-        s.track_statistics(delay, 'auto delay')
+        st.stats.track_statistics(delay, 'auto delay')
         return delay
         
 
