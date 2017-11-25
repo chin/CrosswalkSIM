@@ -59,7 +59,7 @@ class safety_signals:
                 if p.ped.can_cross( peds ):
                     event_list.put( e.event(t + p.ped.exit_time( peds ), e.event.event_type.PED_EXIT, peds.id ) )
         else:
-            wrp = walk_request_pushed( pedNum ): #signal in no_walk state
+            wrp = walk_request_pushed( pedNum ) #signal in no_walk state
             button_press(self, wrp)
         #return self
     
