@@ -1,4 +1,6 @@
-
+#import sys
+#sys.path.append('crosswalk')
+#from SIM import getNext_ButtonTraceFile_UniformRand
 from classes import event as e
 from classes import ped as p
 from enum import Enum
@@ -18,6 +20,7 @@ ped_list = None
 #need to be able to use these
 pedNum = None
 t = None
+getNext_ButtonTraceFile_UniformRand = None
 
 class crosswalksignal(Enum):
     RED_WALK = 0
@@ -27,7 +30,6 @@ class crosswalksignal(Enum):
     GREEN_GO_YELLOW_ON_PRESS = 4
 
 class safety_signals:
-    last_red = 0
     def __init__(self, signal):
         self.safetySignal = crosswalksignal.GREEN_MANDATORY_PERIOD
 
@@ -65,11 +67,11 @@ class safety_signals:
     
     def is_impatient(): #ped is self here
         for peds in ped_list:
-            if (t-peds.arrivalTime) > 60:
+            if (t-peds.arrivalTime) >= 60:
                 event_list.put( e.event( t + 60, e.event.event_type.PED_IMPATIENT, peds.id ) )
 
     def ped_impatient(self):
-        wrp = walk_request_pushed( pedNum ):
+        wrp = walk_request_pushed( pedNum )
         button_press(self, wrp)
         #return self
 
@@ -87,9 +89,8 @@ class safety_signals:
         #return self
 
     def red_begins(self):
-        self.last_red = t + 18
         self.safetySignal = crosswalksignal.RED_WALK
-        event_list.put( e.event( self.last_red, e.event.event_type.RED_EXPIRES, pedNum ) )#red timer = 18s: pedestians can walk
+        event_list.put( e.event( t + 18, e.event.event_type.RED_EXPIRES, pedNum ) )#red timer = 18s: pedestians can walk
         #return self
 
     def green_begins(self):

@@ -59,6 +59,7 @@ lineInPedTrace= 0
 lineInButtonTrace = 0
 pedNum = 1
 s.pedNum = pedNum
+s.t = t
 autoNum = 1
 #eventType = event_type
 
@@ -124,7 +125,8 @@ def run():
         elif e.type == event.event_type.PED_ARRIVAL:
             spawnPed()
             #scheduleExitPed(e.id)
-            s.safety_signals.button_press( safetySignal )            
+            wrp = s.safety_signals.walk_request_pushed( pedNum )
+            s.safety_signals.button_press( safetySignal, wrp )            
 
         elif e.type == event.event_type.PED_AT_BUTTON:
             s.safety_signals.ped_at_button( safetySignal )
@@ -158,7 +160,7 @@ def run():
         elif e.type == event.event_type.PED_EXIT:
             exitPed(e.id) #calcultes delay also
 
-        s.safetySignals.is_impatient()#check if any peds are impatient and creates their approprite impatient event
+        s.safety_signals.is_impatient #check if any peds are impatient and creates their approprite impatient event
             
     #once the event list is empty, final statistics are ready to be output
     st.stats.print_final_statistics(st)
@@ -248,7 +250,7 @@ def exitPed(id):
     global ped_list
     for peds in ped_list:
         if peds.id == id:
-            p.calculate_ped_delay( peds, t )
+            ped.ped.calculate_ped_delay( peds, t )
             ped_list.remove( peds )
             break
 
