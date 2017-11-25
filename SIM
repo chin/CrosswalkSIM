@@ -18,10 +18,10 @@ from classes import safety_signals as s
 from classes import ped
 from classes import auto as auto
 from classes import event
+from classes import stats as st
 
 import argparse
 from classes.event import event_type
-from cmath import sqrt
 try:
     import Queue as Q  # ver. < 3.0
 except ImportError:
@@ -66,12 +66,10 @@ autoNum = 1
 rp = 3 #ped arrival rate in one direction
 ra = 4 #auto arrival rate
 
-#statistics
-#x = average delay = x_bar
-#v = used to calculate sample variance
-x_auto = 0
-v_auto = 0
-x_ped = 0
+#initialize pointers in stats
+st.autoNum = autoNum
+st.pedNum = pedNum
+st.n = n
 
 
 def main():
@@ -161,42 +159,11 @@ def run():
             exitPed(e.id)
             
     #once the event list is empty, final statistics are ready to be output
-    stats.print_final_statistics()
+    st.stats.print_final_statistics(st)
     
 #-----------------------------------------------------------------------------------
 #End Main simulation
 #-----------------------------------------------------------------------------------
-
-class stats:
-    def print_final_statistics(self):
-        if (autoNum != n or pedNum != n):
-            print("Simulation did not create proper number of pedestrians and/or autos")
-            print("N: ", n)
-            print("Autos: ", autoNum)
-            print("Pedestrians: ", pedNum)
-        
-        s_auto = sqrt(v_auto/autoNum)
-        s2_auto = s_auto^2
-        
-        print("OUTPUT Avg auto delay", x_auto, " s^2 of auto delay", s2_auto, "Avg ped delay", x_ped)
-    
-    
-    #welford algorithm 4.1.1 on textbook page 140
-    def track_statistics(self, delay, statType):
-        global x_auto #x bar auto
-        global v_auto
-        global x_ped
-        x = delay
-        
-        if(statType == 'auto delay'):
-            d = x - x_auto
-            v_auto = v_auto + d*d*(autoNum - 1)/autoNum
-            x_auto = x_auto + d/autoNum
-        
-        #no v or s needed for ped statistics
-        elif(statType == 'ped delay'):
-            d = x - x_ped
-            x_auto = x_auto + d/autoNum
 
 
 def spawnAuto():
@@ -205,7 +172,7 @@ def spawnAuto():
     global autoNum
     
     #no spawns if exceed number
-    if (autoNum > n): 
+    if (autoNum >= n): 
         return
     
     auto_interarrival = getNextAutoInterarrival()
@@ -217,6 +184,10 @@ def spawnAuto():
     auto_list.append(newAuto)
     
     autoNum += 1
+    st.autoNum = autoNum
+    #ok its kind of a hacky solution to update the autoNum
+    #that belongs to the stat class here, but its the best I could do
+    #because for some reason NO OTHER CLASS can import SIM or see its global variables
     
     print(str(newAuto))
     
@@ -226,7 +197,7 @@ def spawnPed():
     global ped_list
     global pedNum
     
-    if (pedNum > n): 
+    if (pedNum >= n): 
         return
     
     ped_interarrival = getNextPedInterarrival()
@@ -238,6 +209,7 @@ def spawnPed():
     ped_list.append(newPed)
     
     pedNum += 1
+    st.pedNum = pedNum
     
 def scheduleExitAuto(id, true_exit_time):
     global event_list
@@ -368,6 +340,7 @@ def parseArgs():
         sys.exit (1)
 
     n = int(sys.argv[1])
+    st.n = n
     
     if (n <= 0):
         print("Need positive number of auto/pedestrian arrivals.")
