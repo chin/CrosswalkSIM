@@ -156,7 +156,9 @@ def run():
             exitAuto(e.id)
             
         elif e.type == event.event_type.PED_EXIT:
-            exitPed(e.id)
+            exitPed(e.id) #calcultes delay also
+
+        s.safetySignals.is_impatient()#check if any peds are impatient and creates their approprite impatient event
             
     #once the event list is empty, final statistics are ready to be output
     st.stats.print_final_statistics(st)
@@ -222,14 +224,14 @@ def scheduleExitAuto(id, true_exit_time):
             break
     
     
-def scheduleExitPed(id):
-    global event_list
-
-    for p in ped_list:
-        if p.id == id:
-            #TODO make it actual exit time not exit time with no delay
-            event_list.put( event.event( p.exit_time_if_no_delay(), event.event_type.PED_EXIT, p.id ) )
-            break
+#def scheduleExitPed(id):
+#    global event_list
+#
+#    for p in ped_list:
+#        if p.id == id:
+#            #TODO make it actual exit time not exit time with no delay
+#            event_list.put( event.event( p.exit_time_if_no_delay(), event.event_type.PED_EXIT, p.id ) )
+#            break
     
 def exitAuto(id):
     global auto_list
@@ -244,10 +246,10 @@ def exitAuto(id):
 
 def exitPed(id):
     global ped_list
-    for p in ped_list:
-        if p.id == id:
-            p.calculate_ped_delay()
-            ped_list.remove( p )
+    for peds in ped_list:
+        if peds.id == id:
+            p.calculate_ped_delay( peds, t )
+            ped_list.remove( peds )
             break
 
 def getNextAutoInterarrival():

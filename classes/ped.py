@@ -1,9 +1,10 @@
+from classes import stats as st
 
 class ped:
     B = 330
     S = 46
     w = 24
-    dist = B + S + wx
+    dist = B + S + w
 
     def __init__(self, arrivalTime, velocity, id):
         self.arrivalTime = arrivalTime
@@ -15,6 +16,7 @@ class ped:
         time = exitTime - self.arrivalTime
         minTime = self.dist/self.velocity
         D_p = time - minTime
+        st.stats.track_statistics(D_p, 'ped delay')
         return D_p 
         
     def exit_time_if_no_delay(self):
