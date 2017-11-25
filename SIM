@@ -61,7 +61,7 @@ pedNum = 1
 s.pedNum = pedNum
 s.t = t
 autoNum = 1
-#eventType = event_type
+s.getNext_ButtonTracefile_UniformRand = getNext_ButtonTracefile_UniformRand
 
 #static
 rp = 3 #ped arrival rate in one direction
