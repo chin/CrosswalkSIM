@@ -42,7 +42,7 @@ from statistics import median
 #Global declarations
 
 #TODO: priority queues: notation is "put" and "get"
-eventList = event.event_list( ) #event.event_list = Q.PriorityQueue()
+eventList = event.event_list #event.event_list = Q.PriorityQueue()
 #s.event_list = event_list
 peds_at_crosswalk = Q.PriorityQueue()
 pedList = ped.ped_list( ) #ped.ped_list = []
@@ -103,7 +103,7 @@ def run():
     spawnPed()
     
     while not event.event_list.empty(): #event_list non empty
-        e = eventList.gets(eventList) #event.event_list.get() #remove current from event list
+        e = eventList.get(eventList) #event.event_list.get() #remove current from event list
         
         t = e.time
         s.t = t #update for safety signals class
@@ -264,7 +264,7 @@ def spawnAuto():
     velocity = i.input.getNextAutoSpeed(i)
     newAuto = auto.auto(auto_arrival, velocity, autoNum)
     
-    eventList.puts( event.event(auto_arrival, event.event_type.AUTO_ARRIVAL, autoNum ))
+    eventList.put( event.event(auto_arrival, event.event_type.AUTO_ARRIVAL, autoNum ))
     #event.event_list.put( event.event(auto_arrival, event.event_type.AUTO_ARRIVAL, autoNum))
     auto_list.append(newAuto)
     
@@ -290,7 +290,7 @@ def spawnPed():
     velocity = i.input.getNextPedSpeed(i)
     newPed = ped.ped(ped_arrival, velocity, pedNum)
 
-    eventList.puts( event.event( ped_arrival, event.event_type.PED_ARRIVAL, pedNum ))
+    eventList.put( event.event( ped_arrival, event.event_type.PED_ARRIVAL, pedNum ))
     #event.event_list.put( event.event(ped_arrival, event.event_type.PED_ARRIVAL, pedNum))
     pedList.appends( newPed )
     #ped.ped_list.append(newPed)

@@ -6,18 +6,9 @@ try:
 except ImportError:
     import queue as Q
 
-class event_list(Q.PriorityQueue):
-    #def __init__(self):
-    #    self.event_list = Q.PriorityQueue() 
+#This doesn't need to be a class just a variable
+event_list = Q.PriorityQueue()
 
-    def gets(self):
-        self.get(self)
-
-    def puts(self, x):
-        self.put(self, x)
-        
-    def empty(self):
-        return self.empty()
 
 class event_type(Enum):
     AUTO_ARRIVAL = 0
