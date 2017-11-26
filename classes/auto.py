@@ -11,7 +11,7 @@ class auto:
     	self.id = id					#ID number/index, determined when auto spawns. Eastbound even, Westbound odd
 
     def __str__(self):
-        return "Auto: arrival time %s velocity %s id %s" %(self.arrivalTime,self.velocity,self.id)
+        return "Auto: arrival time %.2f velocity %.2f id %s" %(self.arrivalTime,self.velocity,self.id)
 
     def exit_time_if_no_delay(self):
         S = 46 #street = 46 ft

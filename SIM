@@ -107,6 +107,8 @@ def run():
         s.t = t #update for safety signals class
         #print(t)
         
+        print("Event: time %.2f type %s id %s" %(e.time,e.type,e.id))
+        
         if e.type == event.event_type.AUTO_ARRIVAL:
             #if auto arrival, spawn the next auto
             #and schedule the exit of the current auto
@@ -188,7 +190,7 @@ def spawnAuto():
     #that belongs to the stat class here, but its the best I could do
     #because for some reason NO OTHER CLASS can import SIM or see its global variables
     
-    print(str(newAuto))
+    #print(str(newAuto))
     
 def spawnPed():
     global event_list
