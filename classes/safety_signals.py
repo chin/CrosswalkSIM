@@ -33,6 +33,9 @@ class crosswalksignal(Enum):
 class safety_signals:
     def __init__(self, signal):
         self.safetySignal = crosswalksignal.GREEN_MANDATORY_PERIOD
+        
+    def __str__(self):
+        return "Signal: enum %s" %(self.safetySignal)
 
     def change_signal(self, signal):
         self.safetySignal = signal
