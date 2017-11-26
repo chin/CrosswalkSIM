@@ -110,7 +110,7 @@ def run():
     
     while not event.event_list.empty(): #event_list non empty
         #if (autoNum >= n and pedNum >= n): break
-        print( s.safety_signals.safetySignal )
+        print( s.safety_signals.safetySignal)
         e = eventList.get() #event.event_list.get() #remove current from event list
         
         t = e.time
