@@ -105,7 +105,7 @@ def run():
         
         t = e.time
         s.t = t #update for safety signals class
-        #print(t)
+        print(t, " and the event ", e)
         
         if e.type == event.event_type.AUTO_ARRIVAL:
             #if auto arrival, spawn the next auto
