@@ -65,7 +65,7 @@ st.autoNum = autoNum
 st.pedNum = pedNum
 st.n = n
 
-debugAuto = True
+debugAuto = False
 
 
 def main():
