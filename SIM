@@ -43,6 +43,7 @@ from statistics import median
 
 #TODO: priority queues: notation is "put" and "get"
 eventList = event.event_list #event.event_list = Q.PriorityQueue()
+s.event_list = eventList
 #s.event_list = event_list
 peds_at_crosswalk = Q.PriorityQueue()
 pedList = ped.ped_list #ped.ped_list = []
