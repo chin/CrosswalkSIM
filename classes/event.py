@@ -14,7 +14,7 @@ class event_list:
         self.event_list.get()
 
     def puts(self, x):
-        self.event_list.put(x)
+        self.event_list.put(self, x)
 
 class event_type(Enum):
     AUTO_ARRIVAL = 0
