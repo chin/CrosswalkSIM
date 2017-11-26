@@ -19,7 +19,7 @@ class ped:
         time = exitTime - self.arrivalTime
         minTime = self.dist/self.velocity
         D_p = time - minTime
-        st.stats.track_statistics(D_p, 'ped delay')
+        st.stats.track_statistics(self, D_p, 'ped delay')
         return D_p 
         
     def exit_time_if_no_delay(self):

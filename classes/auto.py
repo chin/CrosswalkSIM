@@ -3,6 +3,7 @@
 #spawn its own exit event
 
 from classes import stats as st
+import math
 
 class auto:
     def __init__(self, arrivalTime, velocity, id):
@@ -69,14 +70,14 @@ class auto:
 
         if (not got_across_before_red and not arrived_after_light_green):
             delay = 0
-            st.stats.track_statistics(delay, 'auto delay')
+            st.stats.track_statistics(self, delay, 'auto delay')
             return delay #not delayed
         
         #If the car is delayed, you have to calculate by how much
     
         vj = self.velocity
         a = 10 #ft/s/s acceleration
-        bj = vj^2 / (2*a)
+        bj = math.pow(vj,2) / (2*a)
         tj = vj/a
         ej = self.arrivalTime
         w = 24 #ft wide crosswalk
@@ -92,7 +93,7 @@ class auto:
         exit_time_if_delay = self.arrivalTime + total_time_if_delay
         
         delay = exit_time_if_delay - self.exit_time_if_no_delay()
-        st.stats.track_statistics(delay, 'auto delay')
+        st.stats.track_statistics(self, delay, 'auto delay')
         return delay
         
 

@@ -29,6 +29,10 @@ class stats:
     def track_statistics(self, delay, statType):
         x = delay
         
+        global x_auto
+        global v_auto
+        global x_ped
+        
         if(statType == 'auto delay'):
             d = x - x_auto
             v_auto = v_auto + d*d*(autoNum - 1)/autoNum

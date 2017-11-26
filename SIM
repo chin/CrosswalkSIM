@@ -65,10 +65,16 @@ st.autoNum = autoNum
 st.pedNum = pedNum
 st.n = n
 
+debugAuto = True
+
 
 def main():
     parseArgs()
-    run()
+    
+    if (debugAuto):
+        runAutoTest()
+    else:
+        run()
     
 #-----------------------------------------------------------------------------------
 #Main simulation loop      
@@ -103,6 +109,8 @@ def run():
     spawnPed()
     
     while not event.event_list.empty(): #event_list non empty
+        if (autoNum >= n and pedNum >= n): break
+                
         e = eventList.get(eventList) #event.event_list.get() #remove current from event list
         
         t = e.time
@@ -181,48 +189,32 @@ def runAutoTest():
     global red_light_times    
 
     t = 0 #sim_time
-    safetySignal = s.safety_signals( s.crosswalksignal.GREEN_GO_YELLOW_ON_PRESS )
     i.input.testRandomValues(i)
     
+    lightNum = 0
+    eventList.put( event.event(t+35, event.event_type.GREEN_EXPIRES, lightNum))
+    
     spawnAuto()
-    spawnPed()
     
     while not event.event_list.empty(): #event_list non empty
-        e = eventList.gets(eventList) #event.event_list.get() #remove current from event list
+        if (autoNum >= n): break
+        
+        e = eventList.get(eventList) #event.event_list.get() #remove current from event list
         
         t = e.time
         s.t = t #update for safety signals class
-        #print(t)
         
         print("Event: time %.2f type %s id %s" %(e.time,e.type,e.id))
         
         if e.type == event.event_type.AUTO_ARRIVAL:
-            #if auto arrival, spawn the next auto
-            #and schedule the exit of the current auto
-            spawnAuto()
-            
-            #Schedule auto exit in safety signal instead
-            #trigger on yellow and calculate delay
-            #scheduleExitAuto(e.id)
-            
-        elif e.type == event.event_type.PED_ARRIVAL:
-            spawnPed()
-            #scheduleExitPed(e.id)
-            wrp = s.safety_signals.walk_request_pushed( safetySignal, pedNum )
-            s.safety_signals.button_press( safetySignal, wrp )            
-
-        elif e.type == event.event_type.PED_AT_BUTTON:
-            s.safety_signals.ped_at_button( safetySignal )
-
-        elif e.type == event.event_type.PED_IMPATIENT:
-           wrp = s.safety_signals.walk_request_pushed( safetySignal, pedNum )
-           s.safety_signals.button_press( safetySignal, wrp )
+            spawnAuto()           
 
         elif e.type == event.event_type.GREEN_EXPIRES:
-            s.safety_signals.green_expires( safetySignal )
+            eventList.put( event.event(t+8+18, event.event_type.YELLOW_EXPIRES, lightNum))
 
         elif e.type == event.event_type.YELLOW_EXPIRES:
-            s.safety_signals.yellow_expires( safetySignal )
+            eventList.put( event.event(t+35, event.event_type.GREEN_EXPIRES, lightNum))
+
 
             #Calculate auto delay on yellow
             #schedule exit events for all active autos
@@ -234,17 +226,9 @@ def runAutoTest():
                 
                 #TODO WELFORDS EQUATIONS
 
-        elif e.type == event.event_type.RED_EXPIRES:
-            s.safety_signals.red_expires( safetySignal )
-
         elif e.type == event.event_type.AUTO_EXIT:
             
             exitAuto(e.id)
-            
-        elif e.type == event.event_type.PED_EXIT:
-            exitPed(e.id) #calcultes delay also
-
-        s.safety_signals.is_impatient #check if any peds are impatient and creates their approprite impatient event
             
     #once the event list is empty, final statistics are ready to be output
     st.stats.print_final_statistics(st)
@@ -306,7 +290,7 @@ def scheduleExitAuto(id, true_exit_time):
         if a.id == id:
             #if correct id, keep as "a"
             #TODO these should all be before the break
-            eventList.puts( event.event(true_exit_time, event.event_type.AUTO_EXIT, a.id ))
+            eventList.put( event.event(true_exit_time, event.event_type.AUTO_EXIT, a.id ))
             #event.event_list.put( event.event(true_exit_time, event.event_type.AUTO_EXIT, a.id))
             break
     
