@@ -1,6 +1,14 @@
 
 
 from enum import Enum
+try:
+    import Queue as Q
+except ImportError:
+    import queue as Q
+
+class event_list:
+    def __init__(self):
+        self.event_list = Q.priorityQueue 
 
 class event_type(Enum):
     AUTO_ARRIVAL = 0

@@ -12,8 +12,8 @@ from classes import input as i
 #The pointer to the global event_list
 #will be passed in to this variable
 #from SIM when it initializes
-event_list = None
-ped_list = None
+#event_list = None
+#ped_list = None
 
 #need to be able to use these
 pedNum = None
@@ -50,24 +50,24 @@ class safety_signals:
             for peds in ped_list:
                 m = 1
                 if p.ped.can_cross( peds ) and m <= 20:
-                    event_list.put( e.event( t + p.ped.exit_time( peds ), e.event.event_type.PED_EXIT, peds.id ) )
+                    e.event_list.put( e.event( t + p.ped.exit_time( peds ), e.event.event_type.PED_EXIT, peds.id ) )
                     m += 1
         #return self
 
     def ped_at_button( self ):
         if self.safetySignal is crosswalksignal.RED_WALK:
-            for peds in ped_list:
+            for peds in p.ped.ped_list:
                 if p.ped.can_cross( peds ):
-                    event_list.put( e.event(t + p.ped.exit_time( peds ), e.event.event_type.PED_EXIT, peds.id ) )
+                    e.event_list.put( e.event(t + p.ped.exit_time( peds ), e.event.event_type.PED_EXIT, peds.id ) )
         else:
             wrp = self.walk_request_pushed( pedNum ) #signal in no_walk state
             self.button_press(self, wrp)
         #return self
     
     def is_impatient(): #ped is self here
-        for peds in ped_list:
+        for peds in p.ped.ped_list:
             if (t - peds.arrivalTime) >= 60:
-                event_list.put( e.event( t + 60, e.event.event_type.PED_IMPATIENT, peds.id ) )
+                e.event_list.put( e.event( t + 60, e.event.event_type.PED_IMPATIENT, peds.id ) )
 
     def ped_impatient(self):
         wrp = self.walk_request_pushed( pedNum )
@@ -76,7 +76,7 @@ class safety_signals:
 
     def yellow_begins(self):
         self.safetySignal = crosswalksignal.YELLOW_NO_WALK
-        event_list.put( e.event( t + 8, e.event.event_type.YELLOW_EXPIRES, pedNum) )#yellow timer = 8s
+        e.event_list.put( e.event( t + 8, e.event.event_type.YELLOW_EXPIRES, pedNum) )#yellow timer = 8s
         #return self
 
     def yellow_expires(self):
@@ -89,12 +89,12 @@ class safety_signals:
 
     def red_begins(self):
         self.safetySignal = crosswalksignal.RED_WALK
-        event_list.put( e.event( t + 18, e.event.event_type.RED_EXPIRES, pedNum ) )#red timer = 18s: pedestians can walk
+        e.event_list.put( e.event( t + 18, e.event.event_type.RED_EXPIRES, pedNum ) )#red timer = 18s: pedestians can walk
         #return self
 
     def green_begins(self):
         self.safetySignal = crosswalksignal.GREEN_MANDATORY_PERIOD
-        event_list( e.event( t + 35, e.event.event_type.GREEN_EXPIRES, pedNum ) )#green timer = 35s
+        e.event_list.put( e.event( t + 35, e.event.event_type.GREEN_EXPIRES, pedNum ) )#green timer = 35s
         #return self
 
     def green_expires(self):

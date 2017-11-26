@@ -5,6 +5,7 @@ class ped:
     S = 46
     w = 24
     dist = B + S + w
+    ped_list = []
 
     def __init__(self, arrivalTime, velocity, id):
         self.arrivalTime = arrivalTime
