@@ -15,6 +15,9 @@ class event_list(Q.PriorityQueue):
 
     def puts(self, x):
         self.put(self, x)
+        
+    def empty(self):
+        return self.empty()
 
 class event_type(Enum):
     AUTO_ARRIVAL = 0
