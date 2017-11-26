@@ -19,7 +19,9 @@ from classes import input as i
 pedNum = None
 t = None
 event_list = None
+#from classes.event import event_list
 ped_list = None
+#from classes.ped import ped_list
 
 class crosswalksignal(Enum):
     RED_WALK = 0
@@ -37,7 +39,6 @@ class safety_signals:
        
     #definitions for functions changing the safety signals
     def button_press(self, request_pushed):
-        
         if self.safetySignal is crosswalksignal.GREEN_GO_YELLOW_ON_PRESS:
             if self.request_pushed:
                 self.yellow_begins(self)
@@ -68,8 +69,11 @@ class safety_signals:
     
     def is_impatient(self): #ped is self here
         for peds in ped_list:
-            if (t - peds.arrivalTime) >= 60:
-                event_list.put( e.event( t + 60, e.event_type.PED_IMPATIENT, peds.id ) )
+            for event in event_list:
+                if event.event_type is e.event_type.PED_IMPATIENT and event.id is peds.id:
+                    pass
+                elif (t - peds.arrivalTime) >= 60:
+                    event_list.put( e.event( t + 60, e.event_type.PED_IMPATIENT, peds.id ) )
 
     def ped_impatient(self):
         wrp = self.walk_request_pushed( pedNum )

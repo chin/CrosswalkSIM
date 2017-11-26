@@ -98,8 +98,6 @@ def run():
     #initialize sim variables
     t = 0 #sim_time
     safetySignal = s.safety_signals( s.crosswalksignal.GREEN_GO_YELLOW_ON_PRESS )
-    #eventList = event.event_list( )
-    #pedList = ped.ped_list( )    
 
     #TEST CODE    
     i.input.testRandomValues(i)
@@ -112,7 +110,7 @@ def run():
     
     while not event.event_list.empty(): #event_list non empty
         #if (autoNum >= n and pedNum >= n): break
-                
+        print( safetySignal )
         e = eventList.get() #event.event_list.get() #remove current from event list
         
         t = e.time
