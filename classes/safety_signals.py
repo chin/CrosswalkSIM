@@ -22,7 +22,6 @@ event_list = None
 #from classes.event import event_list
 ped_list = None
 #from classes.ped import ped_list
-eventlist = []
 
 class crosswalksignal(Enum):
     RED_WALK = 0
@@ -70,13 +69,14 @@ class safety_signals:
     
     def is_impatient(self): #ped is self here
         for peds in ped_list:
-            for event in eventlist:
-                if event.event_type is e.event_type.PED_IMPATIENT and event.id is peds.id:
+            #A priorityQueue is not iterable, but it stores information in a list internally!
+            #This list is accessed with .queue and is iterable.
+            for event in event_list.queue:
+                if event.type is e.event_type.PED_IMPATIENT and event.id is peds.id:
                     pass
                 elif (t - peds.arrivalTime) >= 60:
                     event_list.put( e.event( t + 60, e.event_type.PED_IMPATIENT, peds.id ) )
-                    eventlist.append( e.event(t + 60, e.event_type.PED_IMPATIENT, peds.id ))
-
+                    
     def ped_impatient(self):
         wrp = self.walk_request_pushed( pedNum )
         self.button_press(self, wrp)
