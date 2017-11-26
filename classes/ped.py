@@ -31,4 +31,4 @@ class ped:
         return (( self.w/self.velocity ) >= 0 )
 
     def exit_time(self):
-        retrun ( self.w/self.velocity )
+        return ( self.w/self.velocity )

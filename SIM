@@ -168,7 +168,7 @@ def run():
         elif e.type == event.event_type.PED_EXIT:
             exitPed(e.id) #calcultes delay also
 
-        s.safety_signals.is_impatient #check if any peds are impatient and creates their approprite impatient event
+        s.safety_signals.is_impatient(s) #check if any peds are impatient and creates their approprite impatient event
             
     #once the event list is empty, final statistics are ready to be output
     st.stats.print_final_statistics(st)
