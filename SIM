@@ -45,7 +45,7 @@ from statistics import median
 eventList = event.event_list #event.event_list = Q.PriorityQueue()
 #s.event_list = event_list
 peds_at_crosswalk = Q.PriorityQueue()
-pedList = ped.ped_list( ) #ped.ped_list = []
+pedList = ped.ped_list #ped.ped_list = []
 auto_list = []
 #might not need red light times
 #red_light_times = [] #times when red light turned on
@@ -292,7 +292,7 @@ def spawnPed():
 
     eventList.put( event.event( ped_arrival, event.event_type.PED_ARRIVAL, pedNum ))
     #event.event_list.put( event.event(ped_arrival, event.event_type.PED_ARRIVAL, pedNum))
-    pedList.appends( newPed )
+    pedList.append( newPed )
     #ped.ped_list.append(newPed)
     
     pedNum += 1

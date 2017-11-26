@@ -1,14 +1,7 @@
 from classes import stats as st
 
-class ped_list:
-    def __init__(self):
-        self.ped_list = []
-
-    def appends(self, x):
-        self.ped_list.append(x)
-
-    def removes(self, x):
-        self.ped_list.remove(x)
+#variable instead of class
+ped_list = []
 
 class ped:
     B = 330
