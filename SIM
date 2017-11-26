@@ -319,10 +319,10 @@ def exitAuto(id):
 
 def exitPed(id):
     global pedList #ped.ped_list
-    for peds in ped.ped_list:
+    for peds in pedList:
         if peds.id == id:
             ped.ped.calculate_ped_delay( peds, t )
-            pedList.removes( peds )
+            pedList.remove( peds )
             #ped.ped_list.remove( peds )
             break
         
