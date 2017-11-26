@@ -119,14 +119,15 @@ def run():
         elif e.type == event.event_type.PED_ARRIVAL:
             spawnPed()
             #scheduleExitPed(e.id)
-            wrp = s.safety_signals.walk_request_pushed( pedNum )
+            wrp = s.safety_signals.walk_request_pushed( safetySignal, pedNum )
             s.safety_signals.button_press( safetySignal, wrp )            
 
         elif e.type == event.event_type.PED_AT_BUTTON:
             s.safety_signals.ped_at_button( safetySignal )
 
         elif e.type == event.event_type.PED_IMPATIENT:
-           s.safety_signals.button_press( safetySignal )
+           wrp = s.safety_signals.walk_request_pushed( safetySignal, pedNum )
+           s.safety_signals.button_press( safetySignal, wrp )
 
         elif e.type == event.event_type.GREEN_EXPIRES:
             s.safety_signals.green_expires( safetySignal )
