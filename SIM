@@ -61,7 +61,7 @@ pedNum = 1
 s.pedNum = pedNum
 s.t = t
 autoNum = 1
-s.getNext_ButtonTracefile_UniformRand = getNext_ButtonTracefile_UniformRand
+
 
 #static
 rp = 3 #ped arrival rate in one direction
@@ -111,6 +111,7 @@ def run():
         e = event_list.get() #remove current from event list
         
         t = e.time
+        s.t = t #update for safety signals class
         #print(t)
         
         if e.type == event.event_type.AUTO_ARRIVAL:
@@ -214,6 +215,7 @@ def spawnPed():
     
     pedNum += 1
     st.pedNum = pedNum
+    s.pedNum = pedNum #pass into stats and safety signals
     
 def scheduleExitAuto(id, true_exit_time):
     global event_list

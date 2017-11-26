@@ -20,7 +20,6 @@ ped_list = None
 #need to be able to use these
 pedNum = None
 t = None
-getNext_ButtonTraceFile_UniformRand = None
 
 class crosswalksignal(Enum):
     RED_WALK = 0
