@@ -43,7 +43,7 @@ from statistics import median
 
 #TODO: priority queues: notation is "put" and "get"
 eventList = event.event_list #event.event_list = Q.PriorityQueue()
-s.event_list = eventList
+s.event_list = event.event_list
 #s.event_list = event_list
 peds_at_crosswalk = Q.PriorityQueue()
 pedList = ped.ped_list #ped.ped_list = []
@@ -110,9 +110,9 @@ def run():
     spawnPed()
     
     while not event.event_list.empty(): #event_list non empty
-        if (autoNum >= n and pedNum >= n): break
+        #if (autoNum >= n and pedNum >= n): break
                 
-        e = eventList.get(eventList) #event.event_list.get() #remove current from event list
+        e = eventList.get() #event.event_list.get() #remove current from event list
         
         t = e.time
         s.t = t #update for safety signals class
@@ -200,7 +200,7 @@ def runAutoTest():
     while not event.event_list.empty(): #event_list non empty
         if (autoNum >= n): break
         
-        e = eventList.get(eventList) #event.event_list.get() #remove current from event list
+        e = eventList.get() #event.event_list.get() #remove current from event list
         
         t = e.time
         s.t = t #update for safety signals class
