@@ -105,7 +105,7 @@ def run():
         
         t = e.time
         s.t = t #update for safety signals class
-        #print(t)
+        print(t, " and the event ", e)
         
         print("Event: time %.2f type %s id %s" %(e.time,e.type,e.id))
         
