@@ -47,6 +47,7 @@ s.event_list = event.event_list
 #s.event_list = event_list
 peds_at_crosswalk = Q.PriorityQueue()
 pedList = ped.ped_list #ped.ped_list = []
+s.ped_list = ped.ped_list
 auto_list = []
 #might not need red light times
 #red_light_times = [] #times when red light turned on
