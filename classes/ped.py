@@ -1,17 +1,26 @@
 from classes import stats as st
 
+class ped_list:
+    def __init__(self):
+        self.ped_list = []
+
+    def appends(self, x):
+        self.ped_list.append(x)
+
+    def removes(self, x):
+        self.ped_list.remove(x)
+
 class ped:
     B = 330
     S = 46
     w = 24
     dist = B + S + w
-    ped_list = []
+#    ped_list = []
 
     def __init__(self, arrivalTime, velocity, id):
         self.arrivalTime = arrivalTime
         self.velocity = velocity        #randomly decided speed
         self.id = id                    #ID number/index, determined when ped spawns. Eastbound even, Westbound odd
-
 
     def calculate_ped_delay(self, exitTime):
         time = exitTime - self.arrivalTime

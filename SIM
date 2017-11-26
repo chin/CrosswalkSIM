@@ -42,10 +42,10 @@ from statistics import median
 #Global declarations
 
 #TODO: priority queues: notation is "put" and "get"
-event.event_list = Q.PriorityQueue()
+eventList = event.event_list( ) #event.event_list = Q.PriorityQueue()
 #s.event_list = event_list
 peds_at_crosswalk = Q.PriorityQueue()
-ped.ped.ped_list = []
+pedList = ped.ped_list( ) #ped.ped_list = []
 auto_list = []
 #might not need red light times
 #red_light_times = [] #times when red light turned on
@@ -79,18 +79,20 @@ def run():
     ## these variables are all used in the same function main so no need to describe as global since not used elsewhere without being passed
     global n
     global t
-#    global event.event_list
+    global eventList #event.event_list
     global peds_at_crosswalk
-#    global ped.ped_list
+    global pedList #ped.ped_list
     global auto_list
     global pedNum
     global autoNum
-    global red_light_times
-    
+    global red_light_times    
+
     #initialize sim variables
     t = 0 #sim_time
     safetySignal = s.safety_signals( s.crosswalksignal.GREEN_GO_YELLOW_ON_PRESS )
-    
+    #eventList = event.event_list( )
+    #pedList = ped.ped_list( )    
+
     #TEST CODE    
     i.input.testRandomValues(i)
     
@@ -101,7 +103,7 @@ def run():
     spawnPed()
     
     while not event.event_list.empty(): #event_list non empty
-        e = event.event_list.get() #remove current from event list
+        e = eventList.gets(eventList) #event.event_list.get() #remove current from event list
         
         t = e.time
         s.t = t #update for safety signals class
@@ -168,7 +170,7 @@ def run():
 
 
 def spawnAuto():
-#    global event.event_list
+    global eventList #event.event_list
     global auto_list
     global autoNum
     
@@ -181,7 +183,8 @@ def spawnAuto():
     velocity = i.input.getNextAutoSpeed(i)
     newAuto = auto.auto(auto_arrival, velocity, autoNum)
     
-    event.event_list.put( event.event(auto_arrival, event.event_type.AUTO_ARRIVAL, autoNum))
+    eventList.puts( event.event(auto_arrival, event.event_type.AUTO_ARRIVAL, autoNum ))
+    #event.event_list.put( event.event(auto_arrival, event.event_type.AUTO_ARRIVAL, autoNum))
     auto_list.append(newAuto)
     
     autoNum += 1
@@ -193,9 +196,9 @@ def spawnAuto():
     #print(str(newAuto))
     
 def spawnPed():
-#    global event.event_list
+    global eventList #event.event_list
     global peds_at_crosswalk
-#    global ped.ped.ped_list
+    global pedList #ped.ped_list
     global pedNum
     
     if (pedNum >= n): 
@@ -206,21 +209,24 @@ def spawnPed():
     velocity = i.input.getNextPedSpeed(i)
     newPed = ped.ped(ped_arrival, velocity, pedNum)
 
-    event.event_list.put( event.event(ped_arrival, event.event_type.PED_ARRIVAL, pedNum))
-    ped.ped.ped_list.append( newPed)
+    eventList.puts( event.event( ped_arrival, event.event_type.PED_ARRIVAL, pedNum ))
+    #event.event_list.put( event.event(ped_arrival, event.event_type.PED_ARRIVAL, pedNum))
+    pedList.appends( newPed )
+    #ped.ped_list.append(newPed)
     
     pedNum += 1
     st.pedNum = pedNum
     s.pedNum = pedNum #pass into stats and safety signals
     
 def scheduleExitAuto(id, true_exit_time):
-#    global event.event_list
+    global eventList #event.event_list
 
     for a in auto_list:
         if a.id == id:
             #if correct id, keep as "a"
             #TODO these should all be before the break
-            event.event_list.put( event.event(true_exit_time, event.event_type.AUTO_EXIT, a.id))
+            eventList.puts( event.event(true_exit_time, event.event_type.AUTO_EXIT, a.id ))
+            #event.event_list.put( event.event(true_exit_time, event.event_type.AUTO_EXIT, a.id))
             break
     
     
@@ -245,11 +251,12 @@ def exitAuto(id):
     #a.calculate_auto_delay()
 
 def exitPed(id):
-#    global ped.ped_list
+    global pedList #ped.ped_list
     for peds in ped.ped_list:
         if peds.id == id:
             ped.ped.calculate_ped_delay( peds, t )
-            ped.ped.ped_list.remove( peds )
+            pedList.removes( peds )
+            #ped.ped_list.remove( peds )
             break
         
 

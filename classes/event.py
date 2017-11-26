@@ -8,7 +8,13 @@ except ImportError:
 
 class event_list:
     def __init__(self):
-        self.event_list = Q.priorityQueue 
+        self.event_list = Q.PriorityQueue 
+
+    def gets(self):
+        self.event_list.get()
+
+    def puts(self, x):
+        self.event_list.put(x)
 
 class event_type(Enum):
     AUTO_ARRIVAL = 0
