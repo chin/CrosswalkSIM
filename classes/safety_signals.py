@@ -31,8 +31,9 @@ class crosswalksignal(Enum):
     GREEN_GO_YELLOW_ON_PRESS = 4
 
 class safety_signals:
-    def __init__(self, signal):
-        self.safetySignal = crosswalksignal.GREEN_MANDATORY_PERIOD
+    #might not be used
+    def __init__(self):
+        self.safetySignal = crosswalksignal.GREEN_GO_YELLOW_ON_PRESS
         
     def __str__(self):
         return "Signal: enum %s" %(self.safetySignal)
@@ -123,7 +124,8 @@ class safety_signals:
 
     def walk_request_pushed(self, n):
         u = i.input.getNext_ButtonTracefile_UniformRand(i) #def from SIM file
-        if u < self.button_prob(n):
+        prob = self.button_prob(self, n)
+        if u < prob:
             return True
         else:
             return False
