@@ -19,6 +19,7 @@ from classes import ped
 from classes import auto as auto
 from classes import event
 from classes import stats as st
+from classes import input as i
 
 import argparse
 from classes.event import event_type
@@ -54,18 +55,10 @@ t = 0
 autoTracefile = ""
 pedTracefile = ""
 buttonTracefile = ""
-lineInAutoTrace = 0
-lineInPedTrace= 0
-lineInButtonTrace = 0
 pedNum = 1
 s.pedNum = pedNum
 s.t = t
 autoNum = 1
-
-
-#static
-rp = 3 #ped arrival rate in one direction
-ra = 4 #auto arrival rate
 
 #initialize pointers in stats
 st.autoNum = autoNum
@@ -99,7 +92,7 @@ def run():
     safetySignal = s.safety_signals( s.crosswalksignal.GREEN_GO_YELLOW_ON_PRESS )
     
     #TEST CODE    
-    testRandomValues()
+    i.input.testRandomValues(i)
     
     #To begin, we will spawn the first auto and ped
     #when each arrival is processed, it spawns the next arrival of the same type
@@ -180,9 +173,9 @@ def spawnAuto():
     if (autoNum >= n): 
         return
     
-    auto_interarrival = getNextAutoInterarrival()
+    auto_interarrival = i.input.getNextAutoInterarrival(i)
     auto_arrival = t + auto_interarrival
-    velocity = getNextAutoSpeed()
+    velocity = i.input.getNextAutoSpeed(i)
     newAuto = auto.auto(auto_arrival, velocity, autoNum)
     
     event_list._put(event.event(auto_arrival, event.event_type.AUTO_ARRIVAL, autoNum))
@@ -205,9 +198,9 @@ def spawnPed():
     if (pedNum >= n): 
         return
     
-    ped_interarrival = getNextPedInterarrival()
+    ped_interarrival = i.input.getNextPedInterarrival(i)
     ped_arrival = t + ped_interarrival
-    velocity = getNextPedSpeed()
+    velocity = i.input.getNextPedSpeed(i)
     newPed = ped.ped(ped_arrival, velocity, pedNum)
 
     event_list._put(event.event(ped_arrival, event.event_type.PED_ARRIVAL, pedNum))
@@ -255,75 +248,6 @@ def exitPed(id):
             ped.ped.calculate_ped_delay( peds, t )
             ped_list.remove( peds )
             break
-
-def getNextAutoInterarrival():
-    u = readNextUniformInTrace(traceType.AUTO)
-    u = float(u)
-    return -2*ra*math.log(1.0 - u)
-
-def getNextPedInterarrival():
-    u = readNextUniformInTrace(traceType.PED)
-    u = float(u)
-    return -2*rp*math.log(1.0 - u)
-
-#Uniform(25,35) 
-def getNextAutoSpeed():
-    u = readNextUniformInTrace(traceType.AUTO)
-    u = float(u)
-    a = 25
-    b = 35
-    return a + u * (b - a)
-    
-#Uniform(2.6,4.1)
-def getNextPedSpeed():
-    u = readNextUniformInTrace(traceType.PED)
-    u = float(u)
-    a = 2.6
-    b = 4.1
-    return a + u * (b - a)
-
-def getNext_ButtonTracefile_UniformRand():
-    #TODO CONVERT TO PROBABILITY VALUE CORRECTLY
-    #THIS WILL ALWAYS RETURN UNIFORM 0,1
-    #YOU WILL NEED TO INTREPRET IT BASED ON STATE OF CROSSWALK
-    u = readNextUniformInTrace(traceType.BUTTON)
-    u = float(u)
-    return u
-
-class traceType(Enum):
-    AUTO = 0
-    PED = 1
-    BUTTON = 2
-
-#DO NOT CALL THIS DIRECTLY
-#call using the above methods to get random values
-def readNextUniformInTrace(traceCurrent):
-    if not isinstance(traceCurrent, traceType):
-        raise TypeError('Must be a trace type enum type')
-    
-    uniformRand = 0
-    global autoTracefile
-    global pedTracefile
-    global buttonTracefile
-    global lineInAutoTrace
-    global lineInPedTrace
-    global lineInButtonTrace
-    
-    if traceCurrent == traceType.AUTO:
-        uniformRand = readFile(autoTracefile, lineInAutoTrace)
-        lineInAutoTrace+= 1
-    elif traceCurrent == traceType.PED:
-        uniformRand = readFile(pedTracefile, lineInPedTrace)
-        lineInPedTrace+= 1
-    elif traceCurrent == traceType.BUTTON:
-        uniformRand = readFile(buttonTracefile, lineInButtonTrace)
-        lineInButtonTrace+= 1
-    
-    if (uniformRand == 0):
-        print("Uniform value not returned")
-        sys.exit(1)
-    
-    return uniformRand
         
 
 def parseArgs():
@@ -356,73 +280,16 @@ def parseArgs():
     pedTracefile = sys.argv[3] #Uniform(0,1)
     buttonTracefile = sys.argv[4] #Uniform(0,1)
     
-    readFile(autoTracefile, 0)
-    readFile(pedTracefile, 0)
-    readFile(buttonTracefile, 0)
+    #pass in file name args to input handler
+    i.autoTracefile = autoTracefile
+    i.pedTracefile = pedTracefile
+    i.buttonTracefile = buttonTracefile
     
+    #test that all files can be read successfully
+    i.input.readFile(i, autoTracefile, 0)
+    i.input.readFile(i, pedTracefile, 0)
+    i.input.readFile(i, buttonTracefile, 0)
     
-def readFile(filename, lineInFile):
-    #filehandle = open(filename)
-    #print(filehandle.read())
-    #filehandle.close()
-    
-    relativeFilename = filename;
-    fileDir = os.path.dirname(os.path.realpath('__file__'))
-    filename = os.path.join(fileDir, filename)
-    
-    try:
-        #i starts at 0
-        with open(filename) as fp:
-            for i, line in enumerate(fp):
-                if i == lineInFile:
-                    #print(line)
-                    break
-        
-        
-        if len(line.strip()) == 0 :
-            raise Exception('File ended prematurely:', relativeFilename)
-        
-        return line
-
-    except IOError:
-        print("Could not read file:", relativeFilename)
-        sys.exit(1)
-    except Exception as err:
-        print(err.args[0], err.args[1])
-        sys.exit(1)
-    
-    
-def testRandomValues():
-
-    numTests = 5
-    
-    print("Auto test")
-    for i in range (0,numTests*2):
-        if i % 2 == 0: #even 
-            print('Interarrival', getNextAutoInterarrival(), end='  ')
-        else: #odd
-            print('Speed', getNextAutoSpeed())
-
-    print("\nPed test")
-    for i in range (0,numTests*2):
-        if i % 2 == 0: #even 
-            print('Interarrival', getNextPedInterarrival(), end='  '),
-        else: #odd
-            print('Speed', getNextPedSpeed())
-
-    print("\nUniform button press values")
-    for i in range (0,numTests):
-        print(getNext_ButtonTracefile_UniformRand())
-        
-    print("\nReturning to beginning of input files.\n\n")
-    
-    #Refresh bookmarks
-    global lineInAutoTrace
-    global lineInPedTrace
-    global lineInButtonTrace
-    lineInAutoTrace  =0
-    lineInPedTrace   =0
-    lineInButtonTrace=0
     
 if __name__ == "__main__":
     main()

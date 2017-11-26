@@ -4,6 +4,7 @@
 from classes import event as e
 from classes import ped as p
 from enum import Enum
+from classes import input as i
 
 #instead of storing walk light and traffic signal value
 #track the states of that state diagram
@@ -111,7 +112,7 @@ class safety_signals:
             return (1/(n+1))
 
     def walk_request_pushed(n):
-        u = getNext_ButtonTracefile_UniformRand() #def from SIM file
+        u = i.input.getNext_ButtonTracefile_UniformRand(i) #def from SIM file
         if u < button_prob(n):
             return True
         else:
