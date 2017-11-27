@@ -77,9 +77,10 @@ class safety_signals:
             #This list is accessed with .queue and is iterable.
             for event in event_list.queue:
                 if event.type is e.event_type.PED_IMPATIENT and event.id is peds.id:
-                    pass
+                    break
                 elif (t - peds.arrivalTime) >= 60:
                     event_list.put( e.event( t + 60, e.event_type.PED_IMPATIENT, peds.id ) )
+                    break
                     
     def ped_impatient(self):
         wrp = self.safety_signals.walk_request_pushed( self, pedNum )
