@@ -41,4 +41,4 @@ class stats:
         #no v or s needed for ped statistics
         elif(statType == 'ped delay'):
             d = x - x_ped
-            x_auto = x_auto + d/autoNum
+            x_ped = x_ped + d/pedNum
