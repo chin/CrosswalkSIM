@@ -14,7 +14,7 @@ x_ped = 0.0
 class stats:
     def print_final_statistics(self):        
         if (autoNum != n or pedNum != n):
-            print("Simulation did not create proper number of pedestrians and/or autos")
+            print("Final counter states. May be incremented by an extra one.")
             print("N: ", n)
             print("Autos: ", autoNum)
             print("Pedestrians: ", pedNum)

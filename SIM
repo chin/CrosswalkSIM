@@ -185,7 +185,7 @@ def spawnAuto():
     global autoNum
     
     #no spawns if exceed number
-    if (autoNum >= n): 
+    if (autoNum > n): 
         return
     
     auto_interarrival = i.input.getNextAutoInterarrival(i)
@@ -211,7 +211,7 @@ def spawnPed():
     global pedList #ped.ped_list
     global pedNum
     
-    if (pedNum >= n): 
+    if (pedNum > n): 
         return
     
     ped_interarrival = i.input.getNextPedInterarrival(i)
