@@ -318,6 +318,7 @@ def exitAuto(id):
     #a.calculate_auto_delay()
 
 def exitPed(id):
+    global t
     global pedList #ped.ped_list
     for peds in pedList:
         if peds.id == id:
