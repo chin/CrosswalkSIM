@@ -39,7 +39,7 @@ class input:
         a = 25
         b = 35
         mph = a + u * (b - a)
-        ftpersec = .681818*mph
+        ftpersec = 1.46667*mph
         return ftpersec
         
     #Uniform(2.6,4.1)
