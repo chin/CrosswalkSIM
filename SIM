@@ -131,15 +131,16 @@ def run():
         elif e.type == event.event_type.PED_ARRIVAL:
             spawnPed()
             #scheduleExitPed(e.id)
-            wrp = s.safety_signals.walk_request_pushed(s,pedNum)
-            s.safety_signals.button_press(s,wrp )            
+            wrp = s.safety_signals.walk_request_pushed(s.safety_signals.safetySignal, pedNum)
+            s.safety_signals.button_press( s, wrp )            
 
         elif e.type == event.event_type.PED_AT_BUTTON:
-            s.safety_signals.ped_at_button(s)
+            wrp = s.safety_signals.walk_request_pushed(s.safety_signals.safetySignal, pedNum)
+            s.safety_signals.ped_at_button( s )
 
         elif e.type == event.event_type.PED_IMPATIENT:
             wrp = s.safety_signals.walk_request_pushed(s, pedNum )
-            s.safety_signals.button_press(s, wrp )
+            s.safety_signals.button_press( s, wrp )
 
         elif e.type == event.event_type.GREEN_EXPIRES:
             s.safety_signals.green_expires(s)
@@ -275,6 +276,7 @@ def spawnPed():
     newPed = ped.ped(ped_arrival, velocity, pedNum)
 
     eventList.put( event.event( ped_arrival, event.event_type.PED_ARRIVAL, pedNum ))
+    eventList.put( event.event( ped_arrival + s.safety_signals.get_ped( s.safety_signals.safetySignal, newPed ), event.event_type.PED_AT_BUTTON, pedNum ) )
     #event.event_list.put( event.event(ped_arrival, event.event_type.PED_ARRIVAL, pedNum))
     pedList.append( newPed )
     #ped.ped_list.append(newPed)

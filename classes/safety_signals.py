@@ -67,7 +67,7 @@ class safety_signals:
                 if p.ped.can_cross( peds ):
                     event_list.put( e.event(t + p.ped.exit_time( peds ), e.event_type.PED_EXIT, peds.id ) )
         else:
-            wrp = self.safety_signals.walk_request_pushed( pedNum ) #signal in no_walk state
+            wrp = self.safety_signals.walk_request_pushed( self, pedNum ) #signal in no_walk state
             self.safety_signals.button_press(self, wrp)
         #return self
     
@@ -82,7 +82,7 @@ class safety_signals:
                     event_list.put( e.event( t + 60, e.event_type.PED_IMPATIENT, peds.id ) )
                     
     def ped_impatient(self):
-        wrp = self.safety_signals.walk_request_pushed( pedNum )
+        wrp = self.safety_signals.walk_request_pushed( self, pedNum )
         self.safety_signals.button_press(self, wrp)
         #return self
 
@@ -116,21 +116,20 @@ class safety_signals:
             pass
         #return self
 
-    def button_prob(self, n):
-        if n is 0:
-            return (15/16)
-        else: # n > 0
-            return (1/(n+1))
-
     def walk_request_pushed(self, n):
         u = i.input.getNext_ButtonTracefile_UniformRand(i) #def from SIM file
         num = n
-        prob = self.safety_signals.button_prob(self, num)
+        prob = button_prob(self, num)
         if u < prob:
             return True
         else:
             return False
 
-
+    def get_ped(self, ped):
+        return (p.ped.B/ped.velocity)
     
-
+def button_prob( self, n):
+    if n is 0:
+        return (15/16)
+    else:
+        return (1/n+1)
