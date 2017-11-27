@@ -68,7 +68,12 @@ class auto:
         if (front_end_dist_red_ends > crosswalk_near_end):
             arrived_after_light_green = False
 
+        #if both false, auto is delayed
         if (not got_across_before_red and not arrived_after_light_green):
+            #continue with rest of code
+            pass
+        #otherwise, auto not delayed
+        else:
             delay = 0
             st.stats.track_statistics(st, delay, 'auto delay')
             print("Auto delay: auto num - %s velocity %.2f arrival %.2f exit %.2f min time %.2f delay %.2f" %(self.id, self.velocity, self.arrivalTime, self.exit_time_if_no_delay(), self.exit_time_if_no_delay(), delay))
@@ -95,7 +100,7 @@ class auto:
         
         delay = exit_time_if_delay - self.exit_time_if_no_delay()
         st.stats.track_statistics(st, delay, 'auto delay')
-        print("Auto delay: auto num - %s velocity %.2f arrival %.2f exit %.2f min time %.2f delay %.2f" %(self.id, self.velocity, self.arrivalTime, self.exit_time_if_no_delay(), self.exit_time_if_no_delay(), delay))
+        print("Auto delay: auto num - %s velocity %.2f arrival %.2f exit %.2f min time %.2f delay %.2f" %(self.id, self.velocity, self.arrivalTime, exit_time_if_delay, self.exit_time_if_no_delay(), delay))
         return delay
         
 
