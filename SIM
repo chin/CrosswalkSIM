@@ -166,7 +166,7 @@ def run():
             exitAuto(e.id)
             
         elif e.type == event.event_type.PED_EXIT:
-            exitPed(e.id) #calcultes delay also
+            exitPed(e.id)
 
         s.safety_signals.is_impatient(s) #check if any peds are impatient and creates their approprite impatient event
             
@@ -177,62 +177,6 @@ def run():
 #End Main simulation
 #-----------------------------------------------------------------------------------
 
-#main simulation, but with ONLY auto
-def runAutoTest():
-    global n
-    global t
-    global eventList #event.event_list
-    global peds_at_crosswalk
-    global pedList #ped.ped_list
-    global auto_list
-    global pedNum
-    global autoNum
-    global red_light_times    
-
-    t = 0 #sim_time
-    i.input.testRandomValues(i)
-    
-    lightNum = 0
-    eventList.put( event.event(t+35, event.event_type.GREEN_EXPIRES, lightNum))
-    
-    spawnAuto()
-    
-    while not event.event_list.empty(): #event_list non empty
-        if (autoNum >= n): break
-        
-        e = eventList.get() #event.event_list.get() #remove current from event list
-        
-        t = e.time
-        s.t = t #update for safety signals class
-        
-        print("Event: time %.2f type %s id %s" %(e.time,e.type,e.id))
-        
-        if e.type == event.event_type.AUTO_ARRIVAL:
-            spawnAuto()           
-
-        elif e.type == event.event_type.GREEN_EXPIRES:
-            eventList.put( event.event(t+8+18, event.event_type.YELLOW_EXPIRES, lightNum))
-
-        elif e.type == event.event_type.YELLOW_EXPIRES:
-            eventList.put( event.event(t+35, event.event_type.GREEN_EXPIRES, lightNum))
-
-
-            #Calculate auto delay on yellow
-            #schedule exit events for all active autos
-            time_yellow_began = t - 8; #yellow lasts 8 sec, and it just expired at t
-            
-            for a in auto_list:
-                delay = a.calculate_auto_delay(time_yellow_began)
-                scheduleExitAuto(a.id, a.exit_time_if_no_delay() + delay)
-                
-                #TODO WELFORDS EQUATIONS
-
-        elif e.type == event.event_type.AUTO_EXIT:
-            
-            exitAuto(e.id)
-            
-    #once the event list is empty, final statistics are ready to be output
-    st.stats.print_final_statistics(st)
 
 
 def spawnAuto():
@@ -320,10 +264,10 @@ def exitAuto(id):
 def exitPed(id):
     global t
     global pedList #ped.ped_list
-    for peds in pedList:
-        if peds.id == id:
-            ped.ped.calculate_ped_delay( peds, t )
-            pedList.remove( peds )
+    for p in pedList:
+        if p.id == id:
+            p.calculate_ped_delay( t )
+            pedList.remove( p )
             #ped.ped_list.remove( peds )
             break
         
@@ -371,5 +315,63 @@ def parseArgs():
     
 if __name__ == "__main__":
     main()
+    
+#main simulation, but with ONLY auto
+def runAutoTest():
+    global n
+    global t
+    global eventList #event.event_list
+    global peds_at_crosswalk
+    global pedList #ped.ped_list
+    global auto_list
+    global pedNum
+    global autoNum
+    global red_light_times    
+
+    t = 0 #sim_time
+    i.input.testRandomValues(i)
+    
+    lightNum = 0
+    eventList.put( event.event(t+35, event.event_type.GREEN_EXPIRES, lightNum))
+    
+    spawnAuto()
+    
+    while not event.event_list.empty(): #event_list non empty
+        if (autoNum >= n): break
+        
+        e = eventList.get() #event.event_list.get() #remove current from event list
+        
+        t = e.time
+        s.t = t #update for safety signals class
+        
+        print("Event: time %.2f type %s id %s" %(e.time,e.type,e.id))
+        
+        if e.type == event.event_type.AUTO_ARRIVAL:
+            spawnAuto()           
+
+        elif e.type == event.event_type.GREEN_EXPIRES:
+            eventList.put( event.event(t+8+18, event.event_type.YELLOW_EXPIRES, lightNum))
+
+        elif e.type == event.event_type.YELLOW_EXPIRES:
+            eventList.put( event.event(t+35, event.event_type.GREEN_EXPIRES, lightNum))
+
+
+            #Calculate auto delay on yellow
+            #schedule exit events for all active autos
+            time_yellow_began = t - 8; #yellow lasts 8 sec, and it just expired at t
+            
+            for a in auto_list:
+                delay = a.calculate_auto_delay(time_yellow_began)
+                scheduleExitAuto(a.id, a.exit_time_if_no_delay() + delay)
+                
+                #TODO WELFORDS EQUATIONS
+
+        elif e.type == event.event_type.AUTO_EXIT:
+            
+            exitAuto(e.id)
+            
+    #once the event list is empty, final statistics are ready to be output
+    st.stats.print_final_statistics(st)
+
 
     
