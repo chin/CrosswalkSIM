@@ -53,27 +53,12 @@ class safety_signals:
             pass
 
         elif self.safety_signals.safetySignal is crosswalksignal.RED_WALK:
-            m = 1
-            for peds in ped_list:
-                if peds.ped_at_button( t ):#PED HAS MADE IT TO THE CROSSWALK
-                    print("ped at button, timer is", self.safety_signals.red_timer)
-                    if peds.can_cross( self.safety_signals.red_timer - t) and m <= 20:
-                        print(" PED EXIT EVENT CREATED ", t, " ", peds.exit_time())
-                        event_list.put( e.event( t + peds.exit_time(), e.event_type.PED_EXIT, peds.id ) )
-                        m += 1
+            pass
         #return self
 
     def ped_at_button( self ):
-        if self.safety_signals.safetySignal is crosswalksignal.RED_WALK:
-            m = 1
-            for peds in ped_list:
-                if peds.ped_at_button( t ):#PED HAS MADE IT TO THE CROSSWALK
-                    if peds.can_cross( self.safety_signals.red_timer - t ) and m <= 20:
-                        event_list.put( e.event(t + peds.exit_time(), e.event_type.PED_EXIT, peds.id ) )
-                        m += 1
-        else:
-            wrp = self.safety_signals.walk_request_pushed( self, pedNum ) #signal in no_walk state
-            self.safety_signals.button_press(self, wrp)
+        wrp = self.safety_signals.walk_request_pushed( self, pedNum ) #signal in no_walk state
+        self.safety_signals.button_press(self, wrp)
         #return self
     
     def is_impatient(self): #ped is self here
@@ -83,7 +68,7 @@ class safety_signals:
             for event in event_list.queue:
                 if event.type is e.event_type.PED_IMPATIENT and event.id is peds.id:
                     break
-                elif peds.ped_at_button( t ):
+                elif peds.ped_at_button( t ) and :
                     if (t - (peds.arrivalTime +(p.ped.button/peds.velocity)) ) >= 60:
                         event_list.put( e.event( t + 60, e.event_type.PED_IMPATIENT, peds.id ) )
                         break
