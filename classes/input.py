@@ -68,7 +68,7 @@ class input:
         if not isinstance(traceCurrent, traceType):
             raise TypeError('Must be a trace type enum type')
         
-        uniformRand = 0
+        uniformRand = ""
         global autoTracefile
         global pedTracefile
         global buttonTracefile
