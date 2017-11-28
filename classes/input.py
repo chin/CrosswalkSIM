@@ -111,11 +111,8 @@ class input:
                     if i == lineInFile:
                         if len(line.strip()) == 0 :
                             raise Exception('File ended prematurely:', filename)
-            
-                        return line
                         break
             
-    
         except IOError:
             print("Could not read file:", filename)
             sys.exit(1)
@@ -123,6 +120,7 @@ class input:
             print(err.args[0], err.args[1])
             sys.exit(1)
         
+        return line
         
     def testRandomValues(self):
     
