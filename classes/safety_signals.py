@@ -63,7 +63,7 @@ class safety_signals:
     def ped_at_button( self ):
         if self.safety_signals.safetySignal is crosswalksignal.RED_WALK:
             for peds in ped_list:
-            	if p.ped.ped_at_button( peds, t ):#PED HAS MADE IT TO THE CROSSWALK
+                if p.ped.ped_at_button( peds, t ):#PED HAS MADE IT TO THE CROSSWALK
                     if p.ped.can_cross( peds ):
                         event_list.put( e.event(t + p.ped.exit_time( peds ), e.event_type.PED_EXIT, peds.id ) )
         else:
