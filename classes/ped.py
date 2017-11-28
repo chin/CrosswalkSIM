@@ -28,7 +28,7 @@ class ped:
         return exitTime
     
     def can_cross(self):
-        return (( self.w/self.velocity ) >= 0 )
+        return (( self.w/self.velocity ) >= 0 ) # need to compare to the time left in the light
 
     def exit_time(self):
         return ( self.w/self.velocity )
