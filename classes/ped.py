@@ -8,7 +8,7 @@ class ped:
     S = 46
     w = 24
     dist = B + S + w
-#    ped_list = []
+    button = B + S
 
     def __init__(self, arrivalTime, velocity, id):
         self.arrivalTime = arrivalTime
@@ -16,9 +16,8 @@ class ped:
         self.id = id                    #ID number/index, determined when ped spawns. Eastbound even, Westbound odd
 
     def calculate_ped_delay(self, exitTime):
-        time = exitTime - self.arrivalTime
-        minTime = self.arrivalTime + self.exit_time_if_no_delay()#self.dist/self.velocity
-        D_p = time - minTime
+        minTime = self.exit_time_if_no_delay() #self.dist/self.velocity
+        D_p = exitTime - minTime
         st.stats.track_statistics(st, D_p, 'ped delay')
         print("Ped delay: ped num - %s arrival %.2f exit %.2f min time %.2f delay %.2f" %(self.id, self.arrivalTime, exitTime, minTime, D_p))
         return D_p 
@@ -29,7 +28,13 @@ class ped:
         return exitTime
     
     def can_cross(self):
-        return (( self.w/self.velocity ) >= 0 )
+        return (( self.w/self.velocity ) >= 0 ) # need to compare to the time left in the light
 
     def exit_time(self):
         return ( self.w/self.velocity )
+
+    def ped_at_button(self, sim_time):
+        if ( self.arrivalTime +(self.button/self.velocity) ) <= sim_time:
+            return True
+        else:
+            return False
