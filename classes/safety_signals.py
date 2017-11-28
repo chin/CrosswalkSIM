@@ -39,6 +39,7 @@ class safety_signals:
         self.red_timer = 0
         self.m = 0
         self.waiting_peds =  Q.PriorityQueue()
+        self.etemplist = Q.PriorityQueue()
 
     def __str__(self):
         return "Signal: enum %s" %(self.signal)
@@ -97,15 +98,6 @@ class safety_signals:
         #return self
 
     def red_begins(self):
-        #get rid of all the patient events in the event list
-        i = 0
-        while i in range(event_list.qsize()):
-            ev = event_list.get(i)
-            i += 1
-            if ev.type is e.event_type.PED_IMPATIENT:
-                pass
-            else:
-                event_list.put(ev)
         self.red_timer = t + 18
         print("t is", t, "red timer is ", self.red_timer, "queue is ", self.waiting_peds.qsize())
         self.signal = crosswalksignal.RED_WALK
@@ -115,6 +107,17 @@ class safety_signals:
             peds = self.waiting_peds.get()
             event_list.put( e.event(t + peds.exit_time(), e.event_type.PED_EXIT, peds.id, peds ) )
             self.m += 1
+        #get rid of all the patient events in the event list
+        i = 0
+        while i in range(event_list.qsize()):
+            ev = event_list.get()
+            print("THIS IS THE EVENT ITERATOR ", ev.type, ev.id)
+            #i += 1
+            if ev.type is not e.event_type.PED_IMPATIENT:
+                self.etemplist.put(ev)
+        #put back into event list        
+        while not self.etemplist.empty():
+        	event_list.put(self.etemplist.get())
 
     def green_begins(self):
         self.signal = crosswalksignal.GREEN_MANDATORY_PERIOD
@@ -122,7 +125,7 @@ class safety_signals:
         for i in range(self.waiting_peds.qsize()):
             wrp = self.walk_request_pushed( 0 )
             self.button_press(wrp)
-        event_list.put( e.event( t + 60, e.event_type.PED_IMPATIENT, "multiple peds" ) ) 
+        #event_list.put( e.event( t + 60, e.event_type.PED_IMPATIENT, "multiple peds" ) ) 
 
     def green_expires(self):
         if self.signal is crosswalksignal.GREEN_MANDATORY_PERIOD:
