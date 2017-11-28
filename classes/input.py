@@ -2,11 +2,12 @@ import sys
 import os
 from enum import Enum
 import math
+from tkinter.constants import BUTT
 
 #imported from SIM during initialization
-autoTracefile = ""
-pedTracefile = ""
-buttonTracefile = ""
+autoTracefile = None
+pedTracefile = None
+buttonTracefile = None
 
 #local variables
 lineInAutoTrace = 0
@@ -77,13 +78,13 @@ class input:
         global lineInButtonTrace
         
         if traceCurrent == traceType.AUTO:
-            uniformRand = self.input.readFile(self, autoTracefile, lineInAutoTrace)
+            uniformRand = self.input.readFile(self, autoTracefile)
             lineInAutoTrace+= 1
         elif traceCurrent == traceType.PED:
-            uniformRand = self.input.readFile(self, pedTracefile, lineInPedTrace)
+            uniformRand = self.input.readFile(self, pedTracefile)
             lineInPedTrace+= 1
         elif traceCurrent == traceType.BUTTON:
-            uniformRand = self.input.readFile(self, buttonTracefile, lineInButtonTrace)
+            uniformRand = self.input.readFile(self, buttonTracefile)
             lineInButtonTrace+= 1
         
         if (uniformRand == 0):
@@ -92,8 +93,14 @@ class input:
         
         return uniformRand
 
+    def closeFiles(self):
+        autoTracefile.close()
+        pedTracefile.close()
+        buttonTracefile.close()
+        print("Files closed")
+        
 
-    def readFile(self, filename, lineInFile):
+    def readFile(self, filename):
         #filehandle = open(filename)
         #print(filehandle.read())
         #filehandle.close()
@@ -102,24 +109,12 @@ class input:
         #fileDir = os.path.dirname(os.path.realpath('__file__'))
         #filename = os.path.join(fileDir, filename)
         
-        line = ""
+        line = filename.readline()
         
-        try:
-            #i starts at 0
-            with open(filename) as fp:
-                for i, line in enumerate(fp):
-                    if i == lineInFile:
-                        if len(line.strip()) == 0 :
-                            raise Exception('File ended prematurely:', filename)
-                        break
+        if len(line.strip()) == 0 :
+            raise Exception('File ended prematurely:', filename)
+
             
-        except IOError:
-            print("Could not read file:", filename)
-            sys.exit(1)
-        except Exception as err:
-            print(err.args[0], err.args[1])
-            sys.exit(1)
-        
         return line
         
     def testRandomValues(self):

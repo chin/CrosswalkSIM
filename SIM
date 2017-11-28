@@ -12,6 +12,7 @@
 import sys
 import os
 from enum import Enum
+import io
 
 #importing of the class files
 from classes import safety_signals as s
@@ -100,7 +101,7 @@ def run():
     s.safety_signals.safetySignal = s.crosswalksignal.GREEN_GO_YELLOW_ON_PRESS
 
     #TEST CODE    
-    i.input.testRandomValues(i)
+    #i.input.testRandomValues(i)
     
     #To begin, we will spawn the first auto and ped
     #when each arrival is processed, it spawns the next arrival of the same type
@@ -172,6 +173,9 @@ def run():
             
     #once the event list is empty, final statistics are ready to be output
     st.stats.print_final_statistics(st)
+    
+    i.input.closeFiles(i)
+    
     
 #-----------------------------------------------------------------------------------
 #End Main simulation
@@ -302,15 +306,18 @@ def parseArgs():
     pedTracefile = sys.argv[3] #Uniform(0,1)
     buttonTracefile = sys.argv[4] #Uniform(0,1)
     
-    #pass in file name args to input handler
-    i.autoTracefile = autoTracefile
-    i.pedTracefile = pedTracefile
-    i.buttonTracefile = buttonTracefile
-    
-    #test that all files can be read successfully
-    i.input.readFile(i, autoTracefile, 0)
-    i.input.readFile(i, pedTracefile, 0)
-    i.input.readFile(i, buttonTracefile, 0)
+    #pass in file object to input handler once it has been opened
+    try:
+        i.autoTracefile = open(autoTracefile, 'r')
+        i.pedTracefile = open(pedTracefile, 'r')
+        i.buttonTracefile = open(buttonTracefile, 'r')
+        
+    except IOError:
+            print("Could not read file")
+            sys.exit(1)
+    except Exception as err:
+            print(err.args[0], err.args[1])
+            sys.exit(1)
     
     
 if __name__ == "__main__":

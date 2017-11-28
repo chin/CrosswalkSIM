@@ -1,4 +1,4 @@
-set title "Simple Crosswalk CDF of Mean Ped Delay (N=0)"
+set title "Simple Crosswalk CDF of Mean Ped Delay (N=118)"
 set xlabel "Seconds"
 set ylabel "Percentile"
 set key inside right bottom
@@ -8,7 +8,7 @@ set yzeroaxis
 set offsets graph 0.1, graph 0.1, graph 0.1, graph 0.1
 #set style linewidth 2
 
-plot "_dpdat-crosswalksim-7654-400.dat"          with lines              lt rgbcolor "red"  title 'SIM N=0 results', \
+plot "_dpdat-crosswalksim-7654-400.dat"          with lines              lt rgbcolor "red"  title 'SIM N=118 results', \
 	 "-"    with lines              lt rgbcolor "0x0000ff"  title 'CORRECT N=300 (3 Seeds)', \
 	 "-"   with lines              lt rgbcolor "0x0000cc"  notitle, \
 	 "-"     with lines              lt rgbcolor "0x0000aa"  notitle, \
