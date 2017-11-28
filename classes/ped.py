@@ -38,3 +38,6 @@ class ped:
             return True
         else:
             return False
+
+    def __lt__(self, rhs):
+        return (self.arrivalTime +(self.button/self.velocity)) < (rhs.arrivalTime +(rhs.button/rhs.velocity))

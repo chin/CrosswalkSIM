@@ -57,24 +57,17 @@ class safety_signals:
             pass
         #return self
 
-    def ped_at_button( self ):
-        for peds in ped_list:
-            if peds.ped_at_button( t ):
-                waiting_peds.put(peds)
-                ped_list.remove(peds)
-                #remove from orriginal list?
-        wrp = self.safety_signals.walk_request_pushed( self, waiting_peds.qsize() ) #signal in no_walk state
-        self.safety_signals.button_press(self, wrp)
-        if self.safety_signals.safetySignal != crosswalksignal.YELLOW_NO_WALK:
-            event_list.put( e.event( t + 60, e.event_type.PED_IMPATIENT, peds.id ) )
-        if self.safety_signals.safetySignal != crosswalksignal.RED_WALK:
-            peds = waiting_peds.get(-1)
+    def ped_at_button( self, peds ):
+        ped_list.remove(peds)
+        if self.safety_signals.safetySignal is crosswalksignal.RED_WALK:
             if peds.can_cross( self.safety_signals.red_timer - t ):
-                event_list.put( e.event(t + peds.exit_time(), e.event_type.PED_EXIT, peds.id ) )
+                event_list.put( e.event(t + peds.exit_time(), e.event_type.PED_EXIT, peds.id, peds ) )
             else:
-                waiting_peds.put(peds)
-
-    
+                waiting_peds.put(peds)  
+        else:
+            wrp = self.safety_signals.walk_request_pushed( self, waiting_peds.qsize()-1 ) #signal in no_walk state
+            self.safety_signals.button_press(self, wrp)
+            event_list.put( e.event( t + 60, e.event_type.PED_IMPATIENT, peds.id ) )  
                     
     def ped_impatient(self):
         wrp = self.safety_signals.walk_request_pushed( self, waiting_peds.qsize()  )
@@ -102,7 +95,7 @@ class safety_signals:
         m = 1
         while waiting_peds.qsize() >0 and m <= 20:
             peds = waiting_peds.get()
-            event_list.put( e.event(t + peds.exit_time(), e.event_type.PED_EXIT, peds.id ) )
+            event_list.put( e.event(t + peds.exit_time(), e.event_type.PED_EXIT, peds.id, peds ) )
             m += 1
 
     def green_begins(self):
