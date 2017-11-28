@@ -46,6 +46,7 @@ from statistics import median
 eventList = event.event_list #event.event_list = Q.PriorityQueue()
 s.event_list = event.event_list
 peds_at_crosswalk = Q.PriorityQueue()
+s.waiting_peds = peds_at_crosswalk
 pedList = ped.ped_list #ped.ped_list = []
 s.ped_list = ped.ped_list
 auto_list = []
@@ -165,8 +166,6 @@ def run():
             
         elif e.type == event.event_type.PED_EXIT:
             exitPed(e.id)
-
-        s.safety_signals.is_impatient(s) #check if any peds are impatient and creates their approprite impatient event
             
     #once the event list is empty, final statistics are ready to be output
     st.stats.print_final_statistics(st)
@@ -222,9 +221,7 @@ def spawnPed():
 
     eventList.put( event.event( ped_arrival, event.event_type.PED_ARRIVAL, pedNum ))
     eventList.put( event.event( ped_arrival + s.safety_signals.get_ped( s.safety_signals.safetySignal, newPed ), event.event_type.PED_AT_BUTTON, pedNum ) )
-    #event.event_list.put( event.event(ped_arrival, event.event_type.PED_ARRIVAL, pedNum))
     pedList.append( newPed )
-    #ped.ped_list.append(newPed)
     
     pedNum += 1
     st.pedNum = pedNum
@@ -268,7 +265,7 @@ def exitPed(id):
     for p in pedList:
         if p.id == id:
             p.calculate_ped_delay( t )
-            pedList.remove( p )
+            #pedList.remove( p )
             #ped.ped_list.remove( peds )
             break
         

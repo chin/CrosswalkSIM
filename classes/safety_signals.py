@@ -20,6 +20,7 @@ pedNum = None
 t = None
 event_list = None
 ped_list = None
+waiting_peds = None
 
 class crosswalksignal(Enum):
     RED_WALK = 0
@@ -57,30 +58,32 @@ class safety_signals:
         #return self
 
     def ped_at_button( self ):
-        wrp = self.safety_signals.walk_request_pushed( self, pedNum ) #signal in no_walk state
-        self.safety_signals.button_press(self, wrp)
-        #return self
-    
-    def is_impatient(self): #ped is self here
         for peds in ped_list:
-            #A priorityQueue is not iterable, but it stores information in a list internally!
-            #This list is accessed with .queue and is iterable.
-            for event in event_list.queue:
-                if event.type is e.event_type.PED_IMPATIENT and event.id is peds.id:
-                    break
-                elif peds.ped_at_button( t ) and :
-                    if (t - (peds.arrivalTime +(p.ped.button/peds.velocity)) ) >= 60:
-                        event_list.put( e.event( t + 60, e.event_type.PED_IMPATIENT, peds.id ) )
-                        break
+            if peds.ped_at_button( t ):
+                waiting_peds.put(peds)
+                ped_list.remove(peds)
+                #remove from orriginal list?
+        wrp = self.safety_signals.walk_request_pushed( self, waiting_peds.qsize() ) #signal in no_walk state
+        self.safety_signals.button_press(self, wrp)
+        if self.safety_signals.safetySignal != crosswalksignal.YELLOW_NO_WALK:
+            event_list.put( e.event( t + 60, e.event_type.PED_IMPATIENT, peds.id ) )
+        if self.safety_signals.safetySignal != crosswalksignal.RED_WALK:
+            peds = waiting_peds.get(-1)
+            if peds.can_cross( self.safety_signals.red_timer - t ):
+                event_list.put( e.event(t + peds.exit_time(), e.event_type.PED_EXIT, peds.id ) )
+            else:
+                waiting_peds.put(peds)
+
+    
                     
     def ped_impatient(self):
-        wrp = self.safety_signals.walk_request_pushed( self, pedNum )
+        wrp = self.safety_signals.walk_request_pushed( self, waiting_peds.qsize()  )
         self.safety_signals.button_press(self, wrp)
         #return self
 
     def yellow_begins(self):
         self.safety_signals.safetySignal = crosswalksignal.YELLOW_NO_WALK
-        event_list.put( e.event( t + 8, e.event_type.YELLOW_EXPIRES, pedNum) )#yellow timer = 8s
+        event_list.put( e.event( t + 8, e.event_type.YELLOW_EXPIRES, waiting_peds.qsize() ) )#yellow timer = 8s
         #return self
 
     def yellow_expires(self):
@@ -95,20 +98,16 @@ class safety_signals:
         self.safety_signals.red_timer = t + 18
         print("t is", t, "red timer is ", self.safety_signals.red_timer)
         self.safety_signals.safetySignal = crosswalksignal.RED_WALK
-        event_list.put( e.event( t + 18, e.event_type.RED_EXPIRES, pedNum ) )#red timer = 18s: pedestians can walk
+        event_list.put( e.event( t + 18, e.event_type.RED_EXPIRES, waiting_peds.qsize()  ) )#red timer = 18s: pedestians can walk
         m = 1
-        for peds in ped_list:
-            if peds.ped_at_button( t ):#PED HAS MADE IT TO THE CROSSWALK
-                if peds.can_cross( self.safety_signals.red_timer - t ) and m <= 20:
-                    event_list.put( e.event(t + peds.exit_time(), e.event_type.PED_EXIT, peds.id ) )
-                    m += 1
-
-
-        #return self
+        while waiting_peds.qsize() >0 and m <= 20:
+            peds = waiting_peds.get()
+            event_list.put( e.event(t + peds.exit_time(), e.event_type.PED_EXIT, peds.id ) )
+            m += 1
 
     def green_begins(self):
         self.safety_signals.safetySignal = crosswalksignal.GREEN_MANDATORY_PERIOD
-        event_list.put( e.event( t + 35, e.event_type.GREEN_EXPIRES, pedNum ) )#green timer = 35s
+        event_list.put( e.event( t + 35, e.event_type.GREEN_EXPIRES, waiting_peds.qsize()  ) )#green timer = 35s
         #return self
 
     def green_expires(self):
@@ -128,7 +127,7 @@ class safety_signals:
             return False
 
     def get_ped(self, ped):
-        return ( (p.ped.B+ p.ped.S)/ped.velocity)
+        return ( p.ped.button/ped.velocity)
     
 def button_prob( self, n):
     if n is 0:
