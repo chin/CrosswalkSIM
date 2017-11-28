@@ -1,0 +1,9 @@
+.project
+.pydevproject
+classes/__init__.pyc
+classes/__pycache__/
+classes/event.pyc
+classes/safety_signals.pyc
+*.pyc
+.gitignore~
+__residual*
