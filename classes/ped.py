@@ -16,9 +16,8 @@ class ped:
         self.id = id                    #ID number/index, determined when ped spawns. Eastbound even, Westbound odd
 
     def calculate_ped_delay(self, exitTime):
-        time = exitTime - self.arrivalTime
-        minTime = self.arrivalTime + self.exit_time_if_no_delay()#self.dist/self.velocity
-        D_p = time - minTime
+        minTime = self.exit_time_if_no_delay() #self.dist/self.velocity
+        D_p = exitTime - minTime
         st.stats.track_statistics(st, D_p, 'ped delay')
         print("Ped delay: ped num - %s arrival %.2f exit %.2f min time %.2f delay %.2f" %(self.id, self.arrivalTime, exitTime, minTime, D_p))
         return D_p 
