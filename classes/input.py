@@ -25,11 +25,13 @@ class input:
     def getNextAutoInterarrival(self):
         u = self.input.readNextUniformInTrace(self, traceType.AUTO)
         u = float(u)
+        print("u: ", u)
         return -2*ra*math.log(1.0 - u)
     
     def getNextPedInterarrival(self):
         u = self.input.readNextUniformInTrace(self,traceType.PED)
         u = float(u)
+        print("u: " ,u)
         return -2*rp*math.log(1.0 - u)
     
     #Uniform(25,35) 
