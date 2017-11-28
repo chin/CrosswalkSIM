@@ -8,7 +8,7 @@ class ped:
     S = 46
     w = 24
     dist = B + S + w
-#    ped_list = []
+    button = B + S
 
     def __init__(self, arrivalTime, velocity, id):
         self.arrivalTime = arrivalTime
@@ -32,3 +32,9 @@ class ped:
 
     def exit_time(self):
         return ( self.w/self.velocity )
+
+    def ped_at_button(self, sim_time):
+        if ( self.arrivalTime +(self.button/self.velocity) ) <= sim_time:
+            return True
+        else:
+            return False

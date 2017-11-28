@@ -19,9 +19,7 @@ from classes import input as i
 pedNum = None
 t = None
 event_list = None
-#from classes.event import event_list
 ped_list = None
-#from classes.ped import ped_list
 
 class crosswalksignal(Enum):
     RED_WALK = 0
@@ -56,16 +54,18 @@ class safety_signals:
         elif self.safety_signals.safetySignal is crosswalksignal.RED_WALK:
             for peds in ped_list:
                 m = 1
-                if p.ped.can_cross( peds ) and m <= 20:
-                    event_list.put( e.event( t + p.ped.exit_time( peds ), e.event_type.PED_EXIT, peds.id ) )
-                    m += 1
+                if p.ped.ped_at_button( peds, t ):#PED HAS MADE IT TO THE CROSSWALK
+                    if p.ped.can_cross( peds ) and m <= 20:
+                        event_list.put( e.event( t + p.ped.exit_time( peds ), e.event_type.PED_EXIT, peds.id ) )
+                        m += 1
         #return self
 
     def ped_at_button( self ):
         if self.safety_signals.safetySignal is crosswalksignal.RED_WALK:
             for peds in ped_list:
-                if p.ped.can_cross( peds ):
-                    event_list.put( e.event(t + p.ped.exit_time( peds ), e.event_type.PED_EXIT, peds.id ) )
+            	if p.ped.ped_at_button( peds, t ):#PED HAS MADE IT TO THE CROSSWALK
+                    if p.ped.can_cross( peds ):
+                        event_list.put( e.event(t + p.ped.exit_time( peds ), e.event_type.PED_EXIT, peds.id ) )
         else:
             wrp = self.safety_signals.walk_request_pushed( self, pedNum ) #signal in no_walk state
             self.safety_signals.button_press(self, wrp)
@@ -78,9 +78,10 @@ class safety_signals:
             for event in event_list.queue:
                 if event.type is e.event_type.PED_IMPATIENT and event.id is peds.id:
                     break
-                elif (t - peds.arrivalTime) >= 60:
-                    event_list.put( e.event( t + 60, e.event_type.PED_IMPATIENT, peds.id ) )
-                    break
+                elif p.ped.ped_at_button( peds, t ):
+                    if (t - (peds.arrivalTime +(p.ped.button/peds.velocity)) ) >= 60:
+                        event_list.put( e.event( t + 60, e.event_type.PED_IMPATIENT, peds.id ) )
+                        break
                     
     def ped_impatient(self):
         wrp = self.safety_signals.walk_request_pushed( self, pedNum )
