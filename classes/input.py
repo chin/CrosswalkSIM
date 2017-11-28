@@ -94,9 +94,9 @@ class input:
         #print(filehandle.read())
         #filehandle.close()
         
-        relativeFilename = filename;
-        fileDir = os.path.dirname(os.path.realpath('__file__'))
-        filename = os.path.join(fileDir, filename)
+        #relativeFilename = filename;
+        #fileDir = os.path.dirname(os.path.realpath('__file__'))
+        #filename = os.path.join(fileDir, filename)
         
         try:
             #i starts at 0
@@ -108,12 +108,12 @@ class input:
             
             
             if len(line.strip()) == 0 :
-                raise Exception('File ended prematurely:', relativeFilename)
+                raise Exception('File ended prematurely:', filename)
             
             return line
     
         except IOError:
-            print("Could not read file:", relativeFilename)
+            print("Could not read file:", filename)
             sys.exit(1)
         except Exception as err:
             print(err.args[0], err.args[1])
