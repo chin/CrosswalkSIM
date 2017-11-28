@@ -6,7 +6,7 @@ ped_list = []
 class ped:
     B = 330
     S = 46
-    w = 24
+    w = 46
     dist = B + S + w
     button = B + S
 
@@ -27,8 +27,8 @@ class ped:
         exitTime = self.arrivalTime + time
         return exitTime
     
-    def can_cross(self):
-        return (( self.w/self.velocity ) >= 0 ) # need to compare to the time left in the light
+    def can_cross(self, time_left):
+        return ( time_left -( self.w/self.velocity ) >= 0 ) # need to compare to the time left in the light
 
     def exit_time(self):
         return ( self.w/self.velocity )

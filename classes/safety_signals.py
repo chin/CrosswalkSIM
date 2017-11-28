@@ -29,10 +29,11 @@ class crosswalksignal(Enum):
     GREEN_GO_YELLOW_ON_PRESS = 4
 
 class safety_signals:
-    #might not be used
+     #might not be used
     def __init__(self):
         self.safety_signals.safetySignal = crosswalksignal.GREEN_GO_YELLOW_ON_PRESS
-        
+        self.red_timer = 0
+
     def __str__(self):
         return "Signal: enum %s" %(self.safety_signals.safetySignal)
 
@@ -52,20 +53,24 @@ class safety_signals:
             pass
 
         elif self.safety_signals.safetySignal is crosswalksignal.RED_WALK:
+            m = 1
             for peds in ped_list:
-                m = 1
-                if p.ped.ped_at_button( peds, t ):#PED HAS MADE IT TO THE CROSSWALK
-                    if p.ped.can_cross( peds ) and m <= 20:
-                        event_list.put( e.event( t + p.ped.exit_time( peds ), e.event_type.PED_EXIT, peds.id ) )
+                if peds.ped_at_button( t ):#PED HAS MADE IT TO THE CROSSWALK
+                    print("ped at button, timer is", self.safety_signals.red_timer)
+                    if peds.can_cross( self.safety_signals.red_timer - t) and m <= 20:
+                        print(" PED EXIT EVENT CREATED ", t, " ", peds.exit_time())
+                        event_list.put( e.event( t + peds.exit_time(), e.event_type.PED_EXIT, peds.id ) )
                         m += 1
         #return self
 
     def ped_at_button( self ):
         if self.safety_signals.safetySignal is crosswalksignal.RED_WALK:
+            m = 1
             for peds in ped_list:
-                if p.ped.ped_at_button( peds, t ):#PED HAS MADE IT TO THE CROSSWALK
-                    if p.ped.can_cross( peds ):
-                        event_list.put( e.event(t + p.ped.exit_time( peds ), e.event_type.PED_EXIT, peds.id ) )
+                if peds.ped_at_button( t ):#PED HAS MADE IT TO THE CROSSWALK
+                    if peds.can_cross( self.safety_signals.red_timer - t ) and m <= 20:
+                        event_list.put( e.event(t + peds.exit_time(), e.event_type.PED_EXIT, peds.id ) )
+                        m += 1
         else:
             wrp = self.safety_signals.walk_request_pushed( self, pedNum ) #signal in no_walk state
             self.safety_signals.button_press(self, wrp)
@@ -78,7 +83,7 @@ class safety_signals:
             for event in event_list.queue:
                 if event.type is e.event_type.PED_IMPATIENT and event.id is peds.id:
                     break
-                elif p.ped.ped_at_button( peds, t ):
+                elif peds.ped_at_button( t ):
                     if (t - (peds.arrivalTime +(p.ped.button/peds.velocity)) ) >= 60:
                         event_list.put( e.event( t + 60, e.event_type.PED_IMPATIENT, peds.id ) )
                         break
@@ -102,8 +107,18 @@ class safety_signals:
         #return self
 
     def red_begins(self):
+        self.safety_signals.red_timer = t + 18
+        print("t is", t, "red timer is ", self.safety_signals.red_timer)
         self.safety_signals.safetySignal = crosswalksignal.RED_WALK
         event_list.put( e.event( t + 18, e.event_type.RED_EXPIRES, pedNum ) )#red timer = 18s: pedestians can walk
+        m = 1
+        for peds in ped_list:
+            if peds.ped_at_button( t ):#PED HAS MADE IT TO THE CROSSWALK
+                if peds.can_cross( self.safety_signals.red_timer - t ) and m <= 20:
+                    event_list.put( e.event(t + peds.exit_time(), e.event_type.PED_EXIT, peds.id ) )
+                    m += 1
+
+
         #return self
 
     def green_begins(self):
@@ -128,7 +143,7 @@ class safety_signals:
             return False
 
     def get_ped(self, ped):
-        return (p.ped.B/ped.velocity)
+        return ( (p.ped.B+ p.ped.S)/ped.velocity)
     
 def button_prob( self, n):
     if n is 0:
