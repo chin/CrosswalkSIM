@@ -107,14 +107,12 @@ class input:
             with open(filename) as fp:
                 for i, line in enumerate(fp):
                     if i == lineInFile:
-                        #print(line)
+                        if len(line.strip()) == 0 :
+                            raise Exception('File ended prematurely:', filename)
+            
+                        return line
                         break
             
-            
-            if len(line.strip()) == 0 :
-                raise Exception('File ended prematurely:', filename)
-            
-            return line
     
         except IOError:
             print("Could not read file:", filename)
