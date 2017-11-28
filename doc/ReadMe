@@ -1,0 +1,14 @@
+POINTERS to functions below, as requested in rubric
+
+
+Rubric #4 = Welford's
+	CrosswalkSIM/classes/stats/ print_final_statistics <AND> track_statistics
+Rubric #5 = Expontential variate calculations
+	CrosswalkSIM/classes/input/ getNextAutoInterarrival <AND> getNextPedInterarrival
+Rubric #5 part 2 = proof that N arrivals are not generated all at once
+	CrosswalkSIM/classes/input/ getNextAutoInterarrival >>calls>> readNextUniformInTrace() >>calls>> readFile() >> line 112: filename.readLine()
+	Note: All files are opened once in SIM line 311, read line by line to get each arrival time one at a time, and then closed in classes/input/ closeFiles()
+Rubric #6 = Not using a simple list for event list, instead using a queue
+	CrosswalkSIM/classes/event/ line 10: event_list = Q.PriorityQueue()
+	Note: Main loop in SIM, which starts at line 112, shows things being removed from the top of the queue with get()  (at line 115)
+	In the same file, spawnAuto() and spawnPed() add to the queue. These are just a few examples of where the queue is used.

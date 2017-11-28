@@ -7,3 +7,9 @@ classes/safety_signals.pyc
 *.pyc
 .gitignore~
 __residual*
+_residual*
+__dadat*
+_dadat*
+__dpdat*
+_dpdat*
+.nfs*
