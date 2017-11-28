@@ -3,6 +3,7 @@ import os
 from enum import Enum
 import math
 from tkinter.constants import BUTT
+from random import expovariate # exponenial(lamb)
 
 #imported from SIM during initialization
 autoTracefile = None
@@ -13,8 +14,8 @@ buttonTracefile = None
 lineInAutoTrace = 0
 lineInPedTrace= 0
 lineInButtonTrace = 0
-rp = 3 #ped arrival rate in one direction
-ra = 4 #auto arrival rate
+rp = 60/6 #ped arrival rate in one direction
+ra = 60/8 #auto arrival rate
 
     
 class traceType(Enum):
@@ -28,14 +29,14 @@ class input:
         print("u: ", u)
         u = float(u)
         print("u: ", u)
-        return -2*ra*math.log(1.0 - u)
+        return -1*ra*math.log(1.0 - u)
     
     def getNextPedInterarrival(self):
         u = self.input.readNextUniformInTrace(self,traceType.PED)
         print("u: ", u)
         u = float(u)
         print("u: ", u)
-        return -2*rp*math.log(1.0 - u)
+        return -1*rp*math.log(1.0 - u)
     
     #Uniform(25,35) 
     def getNextAutoSpeed(self):

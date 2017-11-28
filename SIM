@@ -45,8 +45,8 @@ from statistics import median
 #TODO: priority queues: notation is "put" and "get"
 eventList = event.event_list #event.event_list = Q.PriorityQueue()
 s.event_list = event.event_list
-peds_at_crosswalk = Q.PriorityQueue()
-s.waiting_peds = peds_at_crosswalk
+#peds_at_crosswalk = Q.PriorityQueue()
+#s.waiting_peds = peds_at_crosswalk
 pedList = ped.ped_list #ped.ped_list = []
 s.ped_list = ped.ped_list
 auto_list = []
@@ -57,14 +57,17 @@ autoTracefile = ""
 pedTracefile = ""
 buttonTracefile = ""
 pedNum = 1
-s.pedNum = pedNum
 s.t = t
 autoNum = 1
 
 #initialize pointers in stats
 st.autoNum = autoNum
-st.pedNum = pedNum
+#st.pedNum = pedNum- no longer global
 st.n = n
+
+#safety signal instace global
+safetySignal = s.safety_signals()
+
 
 debugAuto = False
 
@@ -92,11 +95,11 @@ def run():
     global auto_list
     global pedNum
     global autoNum
-    global red_timer   
+    global red_timer
+    global safetySignal   
 
     #initialize sim variables
     t = 0 #sim_time
-    s.safety_signals.safetySignal = s.crosswalksignal.GREEN_GO_YELLOW_ON_PRESS
 
     #TEST CODE    
     #i.input.testRandomValues(i)
@@ -108,13 +111,12 @@ def run():
     spawnPed()
     
     while not event.event_list.empty(): #event_list non empty
-        #if (autoNum >= n and pedNum >= n): break
-        print( s.safety_signals.safetySignal )
+
         e = eventList.get() #event.event_list.get() #remove current from event list
         
         t = e.time
         s.t = t #update for safety signals class
-        #print(t)
+        print(safetySignal.signal)
         
         print("Event: time %.2f type %s id %s" %(e.time,e.type,e.id))
         
@@ -130,22 +132,22 @@ def run():
         elif e.type == event.event_type.PED_ARRIVAL:
             spawnPed()
             #scheduleExitPed(e.id)
-            #wrp = s.safety_signals.walk_request_pushed(s.safety_signals.safetySignal, pedNum)
-            #s.safety_signals.button_press( s, wrp )            
+            #wrp = safetySignal.walk_request_pushed(s.signal, pedNum)
+            #safetySignal.button_press( s, wrp )            
 
         elif e.type == event.event_type.PED_AT_BUTTON:
-            wrp = s.safety_signals.walk_request_pushed(s.safety_signals.safetySignal, pedNum)
-            s.safety_signals.ped_at_button( s, e.data )
+            wrp = safetySignal.walk_request_pushed(pedNum)
+            safetySignal.ped_at_button(e.data )
 
         elif e.type == event.event_type.PED_IMPATIENT:
-            wrp = s.safety_signals.walk_request_pushed(s, pedNum )
-            s.safety_signals.button_press( s, wrp )
+            wrp = safetySignal.walk_request_pushed(pedNum )
+            safetySignal.button_press( wrp )
 
         elif e.type == event.event_type.GREEN_EXPIRES:
-            s.safety_signals.green_expires(s)
+            safetySignal.green_expires()
 
         elif e.type == event.event_type.YELLOW_EXPIRES:
-            s.safety_signals.yellow_expires(s)
+            safetySignal.yellow_expires()
 
             #Calculate auto delay on yellow
             #schedule exit events for all active autos
@@ -158,14 +160,14 @@ def run():
                 #TODO WELFORDS EQUATIONS
 
         elif e.type == event.event_type.RED_EXPIRES:
-            s.safety_signals.red_expires(s)
+            safetySignal.red_expires()
 
         elif e.type == event.event_type.AUTO_EXIT:
             
             exitAuto(e.id)
             
         elif e.type == event.event_type.PED_EXIT:
-            exitPed(e.id, e.data)
+            exitPed(e.time, e.data)
             
     #once the event list is empty, final statistics are ready to be output
     st.stats.print_final_statistics(st)
@@ -210,6 +212,7 @@ def spawnPed():
     global peds_at_crosswalk
     global pedList #ped.ped_list
     global pedNum
+    global safetySignal  
     
     if (pedNum > n): 
         return
@@ -220,12 +223,11 @@ def spawnPed():
     newPed = ped.ped(ped_arrival, velocity, pedNum)
 
     eventList.put( event.event( ped_arrival, event.event_type.PED_ARRIVAL, pedNum ))
-    eventList.put( event.event( ped_arrival + s.safety_signals.get_ped( s.safety_signals.safetySignal, newPed ), event.event_type.PED_AT_BUTTON, pedNum, newPed ) )
+    eventList.put( event.event( ped_arrival + safetySignal.get_ped(  newPed ), event.event_type.PED_AT_BUTTON, pedNum, newPed ) )
     pedList.append( newPed )
     
     pedNum += 1
-    st.pedNum = pedNum
-    s.pedNum = pedNum #pass into stats and safety signals
+
     
 def scheduleExitAuto(id, true_exit_time):
     global eventList #event.event_list
@@ -259,8 +261,9 @@ def exitAuto(id):
     #CALCULATE DELAY
     #a.calculate_auto_delay()
 
-def exitPed(id, ped):
-    ped.calculate_ped_delay( t )
+def exitPed(time, ped):
+    st.pedNum += 1
+    ped.calculate_ped_delay( time )
         
 
 def parseArgs():
@@ -320,7 +323,8 @@ def runAutoTest():
     global auto_list
     global pedNum
     global autoNum
-    global red_light_times    
+    global red_light_times
+    global safetySignal      
 
     t = 0 #sim_time
     i.input.testRandomValues(i)
