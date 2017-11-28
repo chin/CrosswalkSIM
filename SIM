@@ -44,13 +44,10 @@ from statistics import median
 #TODO: priority queues: notation is "put" and "get"
 eventList = event.event_list #event.event_list = Q.PriorityQueue()
 s.event_list = event.event_list
-#s.event_list = event_list
 peds_at_crosswalk = Q.PriorityQueue()
 pedList = ped.ped_list #ped.ped_list = []
 s.ped_list = ped.ped_list
 auto_list = []
-#might not need red light times
-#red_light_times = [] #times when red light turned on
 
 n = 0
 t = 0
@@ -93,7 +90,7 @@ def run():
     global auto_list
     global pedNum
     global autoNum
-    global red_light_times    
+    global red_timer   
 
     #initialize sim variables
     t = 0 #sim_time
@@ -131,8 +128,8 @@ def run():
         elif e.type == event.event_type.PED_ARRIVAL:
             spawnPed()
             #scheduleExitPed(e.id)
-            wrp = s.safety_signals.walk_request_pushed(s.safety_signals.safetySignal, pedNum)
-            s.safety_signals.button_press( s, wrp )            
+            #wrp = s.safety_signals.walk_request_pushed(s.safety_signals.safetySignal, pedNum)
+            #s.safety_signals.button_press( s, wrp )            
 
         elif e.type == event.event_type.PED_AT_BUTTON:
             wrp = s.safety_signals.walk_request_pushed(s.safety_signals.safetySignal, pedNum)
