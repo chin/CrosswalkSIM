@@ -102,6 +102,8 @@ class input:
         #fileDir = os.path.dirname(os.path.realpath('__file__'))
         #filename = os.path.join(fileDir, filename)
         
+        line = ""
+        
         try:
             #i starts at 0
             with open(filename) as fp:
