@@ -125,7 +125,7 @@ class safety_signals:
         for i in range(self.waiting_peds.qsize()):
             wrp = self.walk_request_pushed( 0 )
             self.button_press(wrp)
-        #event_list.put( e.event( t + 60, e.event_type.PED_IMPATIENT, "multiple peds" ) ) 
+        event_list.put( e.event( t + 60, e.event_type.PED_IMPATIENT, "multiple peds" ) ) 
 
     def green_expires(self):
         if self.signal is crosswalksignal.GREEN_MANDATORY_PERIOD:

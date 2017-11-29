@@ -2,7 +2,7 @@ import math
 
 #globals to be passed in
 autoNum = None
-pedNum = 0 #updated by exit
+pedNum = 1 #updated by exit
 n = None
 
 #x = average delay = x_bar
