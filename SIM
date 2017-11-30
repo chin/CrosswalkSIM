@@ -61,7 +61,7 @@ s.t = t
 autoNum = 1
 
 #initialize pointers in stats
-st.autoNum = autoNum
+#st.autoNum = autoNum
 #st.pedNum = pedNum- no longer global
 st.n = n
 
@@ -140,8 +140,8 @@ def run():
             safetySignal.ped_at_button(e.data )
 
         elif e.type == event.event_type.PED_IMPATIENT:
-            wrp = safetySignal.walk_request_pushed(pedNum )
-            safetySignal.button_press( wrp )
+            #wrp = safetySignal.walk_request_pushed(pedNum )
+            safetySignal.button_press( 1 )
 
         elif e.type == event.event_type.GREEN_EXPIRES:
             safetySignal.green_expires()
@@ -200,7 +200,7 @@ def spawnAuto():
     auto_list.append(newAuto)
     
     autoNum += 1
-    st.autoNum = autoNum
+    #st.autoNum = autoNum
     #ok its kind of a hacky solution to update the autoNum
     #that belongs to the stat class here, but its the best I could do
     #because for some reason NO OTHER CLASS can import SIM or see its global variables
@@ -257,7 +257,7 @@ def exitAuto(id):
         if a.id == id:
             auto_list.remove(a) #if correct id, remove from list of autos
             break
-    
+    st.autoNum +=1
     #CALCULATE DELAY
     #a.calculate_auto_delay()
 

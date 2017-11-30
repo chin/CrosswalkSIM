@@ -1,7 +1,7 @@
 import math
 
 #globals to be passed in
-autoNum = None
+autoNum = 1
 pedNum = 1 #updated by exit
 n = None
 
