@@ -29,14 +29,16 @@ class input:
         print("u: ", u)
         u = float(u)
         print("u: ", u)
-        return -1*ra*math.log(1.0 - u)
+        #return -1*ra*math.log(1.0 - u)
+        return -1*ra*math.log(u);
     
     def getNextPedInterarrival(self):
         u = self.input.readNextUniformInTrace(self,traceType.PED)
         print("u: ", u)
         u = float(u)
         print("u: ", u)
-        return -1*rp*math.log(1.0 - u)
+        #return -1*rp*math.log(1.0 - u)
+        return -1*rp*math.log(u);
     
     #Uniform(25,35) 
     def getNextAutoSpeed(self):
@@ -45,9 +47,8 @@ class input:
         a = 25
         b = 35
         mph = a + u * (b - a)
-        #ftpersec = 1.46667*mph
-        #return ftpersec
-        return mph;
+        ftpersec = 1.46667*mph
+        return ftpersec
         
     #Uniform(2.6,4.1)
     def getNextPedSpeed(self):
