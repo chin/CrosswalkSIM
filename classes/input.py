@@ -45,8 +45,9 @@ class input:
         a = 25
         b = 35
         mph = a + u * (b - a)
-        ftpersec = 1.46667*mph
-        return ftpersec
+        #ftpersec = 1.46667*mph
+        #return ftpersec
+        return mph;
         
     #Uniform(2.6,4.1)
     def getNextPedSpeed(self):
