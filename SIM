@@ -75,10 +75,10 @@ debugAuto = False
 def main():
     parseArgs()
     
-    if (debugAuto):
-        runAutoTest()
-    else:
-        run()
+    #if (debugAuto):
+        #runAutoTest()
+    
+    run()
     
 #-----------------------------------------------------------------------------------
 #Main simulation loop      
@@ -170,6 +170,8 @@ def run():
             exitPed(e.time, e.data)
             
     #once the event list is empty, final statistics are ready to be output
+    print("Global pedNum: ", pedNum ," Global autonum: ", autoNum);
+    
     st.stats.print_final_statistics(st)
     
     i.input.closeFiles(i)
@@ -314,6 +316,7 @@ if __name__ == "__main__":
     main()
     
 #main simulation, but with ONLY auto
+'''
 def runAutoTest():
     global n
     global t
@@ -370,6 +373,7 @@ def runAutoTest():
             
     #once the event list is empty, final statistics are ready to be output
     st.stats.print_final_statistics(st)
+    '''
 
 
     
