@@ -14,7 +14,7 @@ buttonTracefile = None
 lineInAutoTrace = 0
 lineInPedTrace= 0
 lineInButtonTrace = 0
-rp = 60/6 #ped arrival rate in one direction
+rp = 60/6 #ped arrival rate in both directions
 ra = 60/8 #auto arrival rate
 
     
