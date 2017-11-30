@@ -35,7 +35,7 @@ class stats:
         
         if(statType == 'auto delay'):
             d = x - x_auto
-            v_auto = v_auto + d*d*(autoNum - 1)/autoNum
+            v_auto = v_auto + d*d*autoNum/autoNum #(autoNum - 1)/autoNum
             x_auto = x_auto + d/autoNum
         
         #no v or s needed for ped statistics
