@@ -164,6 +164,8 @@ def run():
                 #if exit already scheduled, dont schedule a duplicate
                 if exitedAutosList.__contains__(a.id):
                     continue;
+                if auto_list.__sizeof__() != 0:
+                    st.autoNum +=1
                 delay = a.calculate_auto_delay(time_yellow_began)
                 scheduleExitAuto(a.id, a.exit_time_if_no_delay() + delay)
                 
@@ -269,9 +271,6 @@ def exitAuto(id):
         if a.id == id:
             auto_list.remove(a) #if correct id, remove from list of autos
             break
-    
-    if auto_list.__sizeof__() != 0:
-        st.autoNum +=1
     #CALCULATE DELAY
     #a.calculate_auto_delay()
 
